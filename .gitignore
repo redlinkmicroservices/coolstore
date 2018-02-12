@@ -1,0 +1,11 @@
+*~
+.DS_Store
+.idea
+
+guides/**/pubsnum.xml
+guides/**/subtitle.xml
+guides/publican-*.cfg-*
+guides/tmp
+
+# editor swap files
+.*.sw?

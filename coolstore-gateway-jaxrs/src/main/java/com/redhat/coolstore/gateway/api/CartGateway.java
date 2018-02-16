@@ -1,5 +1,6 @@
 package com.redhat.coolstore.gateway.api;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import javax.ws.rs.Consumes;
@@ -22,10 +23,12 @@ import com.redhat.coolstore.gateway.proxy.CartResource;
 
 @Path("cart")
 @Consumes(MediaType.APPLICATION_JSON)
+@RequestScoped
 public class CartGateway {
 	
+	@SuppressWarnings("cdi-ambiguous-dependency")
 	@Inject
-	@ConfigProperty(name="CART.SERVICE.URL")
+	@ConfigProperty(name="CART_SERVICE_URL")
 	private String cartURL;
 	
 	private CartResource buildClient() {

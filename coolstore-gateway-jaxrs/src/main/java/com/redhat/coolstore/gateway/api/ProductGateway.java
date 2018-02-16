@@ -2,6 +2,7 @@ package com.redhat.coolstore.gateway.api;
 
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,9 +21,10 @@ import com.redhat.coolstore.gateway.proxy.ProductResource;
 
 
 @Consumes(MediaType.APPLICATION_JSON)
+@RequestScoped
 public class ProductGateway {
 	
-	@ConfigProperty(name="CATALOG.SERVICE.URL")
+	@ConfigProperty(name="CATALOG_SERVICE_URL")
 	private String catalogServiceUrl;
 	
 	

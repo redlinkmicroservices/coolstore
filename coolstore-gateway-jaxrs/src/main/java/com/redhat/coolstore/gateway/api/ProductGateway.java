@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -20,16 +22,19 @@ import com.redhat.coolstore.gateway.model.Product;
 import com.redhat.coolstore.gateway.proxy.ProductResource;
 
 
+@Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class ProductGateway {
 	
+	@Inject
 	@ConfigProperty(name="CATALOG_SERVICE_URL")
 	private String catalogServiceUrl;
 	
 	
 	private ProductResource buildClient() {
-		System.out.println("Building new client");
+		System.out.println("Building new client with uri " + catalogServiceUrl);
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(catalogServiceUrl);
 		ResteasyWebTarget restEasyTarget = (ResteasyWebTarget)target;
@@ -54,7 +59,7 @@ public class ProductGateway {
 
 	@POST
 	@Path("/product")
-	public void addProduct(Product product) {
+	public void addProduct(final Product product) {
 		ProductResource proxy = buildClient();
 		proxy.addProduct(product);
 	}

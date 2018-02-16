@@ -2,13 +2,13 @@ package com.redhat.coolstore.gateway.api;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -23,6 +23,7 @@ import com.redhat.coolstore.gateway.proxy.CartResource;
 
 @Path("cart")
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class CartGateway {
 	
@@ -32,7 +33,7 @@ public class CartGateway {
 	private String cartURL;
 	
 	private CartResource buildClient() {
-		System.out.println("Building new client");
+		System.out.println("Building new client " + cartURL);
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(cartURL);
 		ResteasyWebTarget restEasyTarget = (ResteasyWebTarget)target;

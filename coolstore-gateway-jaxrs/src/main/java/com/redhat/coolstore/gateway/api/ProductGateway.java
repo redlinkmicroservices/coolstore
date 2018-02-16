@@ -29,7 +29,7 @@ import com.redhat.coolstore.gateway.proxy.ProductResource;
 public class ProductGateway {
 	
 	@Inject
-	@ConfigProperty(name="CATALOG_SERVICE_URL")
+	@ConfigProperty(name="CATALOG_SERVICE_URL", defaultValue="")
 	private String catalogServiceUrl;
 	
 	

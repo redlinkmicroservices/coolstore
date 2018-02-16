@@ -1,4 +1,4 @@
-package com.redhat.coolstore.api.gateway;
+package com.redhat.coolstore.gateway.api;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

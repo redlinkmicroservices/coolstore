@@ -1,4 +1,4 @@
-package com.redhat.coolstore.api.gateway;
+package com.redhat.coolstore.gateway.api;
 
 import java.util.List;
 

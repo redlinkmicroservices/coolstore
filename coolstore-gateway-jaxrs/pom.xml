@@ -21,13 +21,9 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-		<!-- 	<dependency>
-				<groupId>org.eclipse.microprofile</groupId>
-				<artifactId>microprofile</artifactId>
-				<version>${version.microprofile}</version>
-				<type>pom</type>
-				<scope>provided</scope>
-			</dependency> -->
+			<!-- <dependency> <groupId>org.eclipse.microprofile</groupId> <artifactId>microprofile</artifactId> 
+				<version>${version.microprofile}</version> <type>pom</type> <scope>provided</scope> 
+				</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -66,7 +62,11 @@
 			<version>3.0.24.Final-redhat-1</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+			<version>3.0.24.Final-redhat-1</version>
+		</dependency>
 
 	</dependencies>
 	<build>

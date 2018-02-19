@@ -3,7 +3,6 @@ package com.redhat.coolstore.gateway.api.tests;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.io.File;
 import java.util.Properties;
 
 import javax.ws.rs.client.Client;
@@ -18,8 +17,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +30,6 @@ import com.eclipsesource.json.JsonObject;
 import com.redhat.coolstore.gateway.api.RestApplication;
 import com.redhat.coolstore.gateway.model.ShoppingCartItem;
 import com.redhat.coolstore.gateway.proxy.CartResource;
-import com.sun.tools.corba.se.idl.constExpr.GreaterThan;
 
 @Category(UnitTests.class)
 @RunWith(Arquillian.class)

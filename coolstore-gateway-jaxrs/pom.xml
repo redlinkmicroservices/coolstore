@@ -21,13 +21,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<dependency>
+		<!-- 	<dependency>
 				<groupId>org.eclipse.microprofile</groupId>
 				<artifactId>microprofile</artifactId>
 				<version>${version.microprofile}</version>
 				<type>pom</type>
 				<scope>provided</scope>
-			</dependency>
+			</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -80,15 +80,34 @@
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 			<version>2.2.1.GA</version>
-				<scope>provided</scope>
+			<scope>provided</scope>
 		</dependency>
+		 <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <version>3.1.4.Final</version>
+            <scope>provided</scope>
+        </dependency>
+ 
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jaxrs-multipart</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxb-provider</artifactId>
 			<version>2.2.0.GA</version>
-				<scope>provided</scope>
+			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2.redhat-1</version>
+		</dependency>
+
+
 
 	</dependencies>
 	<build>
@@ -134,7 +153,7 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>2.12.4</version>
 						<configuration>
-							<groups>com.redhat.coolstore.inventory.tests.UnitTests</groups>
+							<groups>com.redhat.coolstore.gateway.api.tests.UnitTests</groups>
 						</configuration>
 					</plugin>
 				</plugins>

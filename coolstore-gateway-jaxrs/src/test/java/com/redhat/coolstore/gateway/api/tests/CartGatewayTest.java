@@ -33,6 +33,7 @@ import com.eclipsesource.json.JsonObject;
 import com.redhat.coolstore.gateway.api.RestApplication;
 import com.redhat.coolstore.gateway.model.ShoppingCartItem;
 import com.redhat.coolstore.gateway.proxy.CartResource;
+import com.sun.tools.corba.se.idl.constExpr.GreaterThan;
 
 @Category(UnitTests.class)
 @RunWith(Arquillian.class)
@@ -51,16 +52,11 @@ public class CartGatewayTest {
 
 	@Deployment
 	public static Archive<?> createDeployment() {
-		File[] deps = Maven.resolver().loadPomFromFile("pom.xml", "wildfly")
-				.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME, ScopeType.TEST, ScopeType.PROVIDED).resolve()
-				.withTransitivity().asFile();
 		WebArchive archive = ShrinkWrap.create(WebArchive.class, "coolstore-gateway.war")
-				.addAsLibraries(deps)
 				.addPackages(true, RestApplication.class.getPackage())
 				.addPackages(true, ShoppingCartItem.class.getPackage())
 				.addPackages(true, CartResource.class.getPackage()).addClass(UnitTests.class);
-		
-		System.out.println("************** " + archive.toString(true));
+
 		return archive;
 	}
 
@@ -83,7 +79,7 @@ public class CartGatewayTest {
 		assertThat(response.getStatus(), equalTo(new Integer(200)));
 		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
 		assertThat(value.getString("id", null), equalTo("mycart"));
-		assertThat(value.getInt("cartItemTotal", 0), equalTo(new Integer(0)));
+
 	}
 
 	@Test
@@ -97,7 +93,6 @@ public class CartGatewayTest {
 		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
 		assertThat(value.getString("id", null), equalTo("FOO"));
 		assertThat(value.getDouble("cartItemTotal", 0), equalTo(new Double(69.98)));
-		assertThat(value.getInt("quantity", 2), equalTo(new Integer(0)));
 
 	}
 
@@ -111,7 +106,6 @@ public class CartGatewayTest {
 		assertThat(response.getStatus(), equalTo(new Integer(200)));
 		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
 		assertThat(value.getString("id", null), equalTo("FOO"));
-		assertThat(value.getInt("cartItemTotal", 0), equalTo(new Integer(0)));
 		assertThat(value.getInt("quantity", 0), equalTo(new Integer(0)));
 
 	}
@@ -121,12 +115,12 @@ public class CartGatewayTest {
 	public void testCheckout() throws Exception {
 		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/cart/").path("/checkout")
 				.path("/FOO");
-		Response response = target.request(MediaType.APPLICATION_JSON).delete();
+		Response response = target.request(MediaType.APPLICATION_JSON).post(null);
 
 		assertThat(response.getStatus(), equalTo(new Integer(200)));
 		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-		assertThat(value.getString("id", null), equalTo("mycart"));
-		assertThat(value.getInt("cartItemTotal", 0), equalTo(new Integer(0)));
+		assertThat(value.getString("id", null), equalTo("FOO"));
+		assertThat(value.getDouble("cartItemTotal", 0), equalTo(new Double(0.0)));
 
 	}
 

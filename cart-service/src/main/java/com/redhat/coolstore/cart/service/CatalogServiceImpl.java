@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.redhat.coolstore.cart.model.Product;
 
 @Component
@@ -15,6 +16,7 @@ public class CatalogServiceImpl implements CatalogService {
 	private String catalogServiceUrl;
 
 	@Override
+	@HystrixCommand(commandKey = "CatalogService", fallbackMethod = "getFallbackProduct")
 	public Product getProduct(String itemId) {
 		RestTemplate restTemplate = new RestTemplate();
 		try {
@@ -26,6 +28,10 @@ public class CatalogServiceImpl implements CatalogService {
 				return null;
 			else throw (ex);
 		}
+	}
+	
+	public Product getFallbackProduct(String itemId) {
+		return null;
 	}
 
 }

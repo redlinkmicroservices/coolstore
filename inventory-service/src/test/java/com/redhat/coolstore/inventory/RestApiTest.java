@@ -60,6 +60,8 @@ public class RestApiTest {
 
         WebArchive archive =  ShrinkWrap.create(WebArchive.class, "inventory-service.war")
                 .addPackages(true, RestApplication.class.getPackage())
+                .addClass(ErrorInventoryService.class)
+                .addAsWebInfResource("test-beans.xml", "beans.xml")
                 .addAsResource("project-local.yml", "project-local.yml")
                 .addAsResource("META-INF/test-persistence.xml",  "META-INF/persistence.xml")
                 .addAsResource("META-INF/test-load.sql",  "META-INF/test-load.sql");
@@ -123,6 +125,14 @@ public class RestApiTest {
         JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
         assertThat(value.getString("id", ""), equalTo("server-state"));
         assertThat(value.getString("result", ""), equalTo("UP"));
+    }
+    
+    @Test
+    @RunAsClient
+    public void testError() throws Exception {
+        WebTarget target = client.target("http://localhost:" + port).path("/inventory").path("/error");
+        Response response = target.request(MediaType.APPLICATION_JSON).get();
+        assertThat(response.getStatus(), equalTo(new Integer(503)));
     }
 
 }

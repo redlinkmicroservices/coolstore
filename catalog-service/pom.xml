@@ -47,6 +47,10 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-mongo-client</artifactId>
     </dependency>
+     <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-circuit-breaker</artifactId>
+    </dependency>
     <!-- TODO: Insert dependencies for Kubernetes ConfigMap support--> 
       <dependency>
       <groupId>io.vertx</groupId>

@@ -1,8 +1,12 @@
 package com.redhat.coolstore.catalog.api;
 
+import java.util.List;
+
 import com.redhat.coolstore.catalog.model.Product;
 import com.redhat.coolstore.catalog.verticle.service.CatalogService;
 
+import io.vertx.circuitbreaker.CircuitBreaker;
+import io.vertx.circuitbreaker.CircuitBreakerOptions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
@@ -17,12 +21,16 @@ public class ApiVerticle extends AbstractVerticle {
 
 	private CatalogService catalogService;
 
+	private CircuitBreaker circuitBreaker;
+
 	public ApiVerticle(CatalogService catalogService) {
 		this.catalogService = catalogService;
 	}
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
+
+		
 
 		Router router = Router.router(vertx);
 		// ----
@@ -41,19 +49,24 @@ public class ApiVerticle extends AbstractVerticle {
 		router.post("/product").handler(this::addProduct);
 		// The handler for this route is implemented by the `addProduct()` method.
 		// ----
-		router.get("/health/readiness").handler(requestHandler->{
+		router.get("/health/readiness").handler(requestHandler -> {
 			requestHandler.response().end("OK");
 		});
-		HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx)
-				   .register("health", f -> health(f));
+		HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx).register("health", f -> health(f));
 		router.get("/health/liveness").handler(healthCheckHandler);
 		
+		
+		circuitBreaker = CircuitBreaker.create("product-circuit-breaker", vertx,
+				new CircuitBreakerOptions().setMaxFailures(3) // number of failure before opening the circuit
+						.setTimeout(1000) // consider a failure if the operation does not succeed in time
+						.setFallbackOnFailure(true) // do we call the fallback on failure
+						.setResetTimeout(5000) // time spent in open state before attempting to re-try
+		);
+
 		// ----
 		// Create a HTTP server.
 		// * Use the `Router` as request handler
-		vertx.createHttpServer()
-			.requestHandler(router::accept)
-			.listen(config().getInteger("catalog.http.port", 8080),
+		vertx.createHttpServer().requestHandler(router::accept).listen(config().getInteger("catalog.http.port", 8080),
 				result -> {
 					if (result.succeeded()) {
 						startFuture.complete();
@@ -70,69 +83,70 @@ public class ApiVerticle extends AbstractVerticle {
 		// ----
 	}
 
-	private void getProducts(RoutingContext rc) {
-		// ----
-		// Needs to be implemented
-		// In the implementation:
-		JsonArray array = new JsonArray();
-		catalogService.getProducts(handler -> {
-			if (handler.succeeded()) {
-				handler.result().stream().map(p -> p.toJson()).forEach(p -> array.add(p));
-				rc.response().putHeader("Content-Type", "application/json").end(array.encodePrettily());
-			} else {
-				rc.fail(503);
-			}
-		});
-
-		// * Call the `getProducts()` method of the CatalogService.
-		// * In the handler, transform the `List<Product>` response to a `JsonArray`
-		// object.
-		// * Put a "Content-type: application/json" header on the `HttpServerResponse`
-		// object.
-		// * Write the `JsonArray` to the `HttpServerResponse`, and end the response.
-		// * If the `getProducts()` method returns a failure, fail the `RoutingContext`.
-		// ----
-	}
-
-	private void getProduct(RoutingContext rc) {
-		// ----
-		catalogService.getProduct(rc.request().getParam("itemId"), handler -> {
-			if (handler.succeeded()) {
-				Product result = handler.result();
-				if (result != null) {
-					String json = result.toJson().encodePrettily();
-					rc.response().putHeader("Content-Type", "application/json").end(json);
-				} else {
-					rc.fail(404);
-				}
-
-			} else {
-				rc.fail(handler.cause());
-			}
-		});
-
-		// Needs to be implemented
-		// In the implementation:
-		// * Call the `getProduct()` method of the CatalogService.
-		// * In the handler, transform the `Product response to a `JsonObject` object.
-		// * Put a "Content-type: application/json" header on the `HttpServerResponse`
-		// object.
-		// * Write the `JsonObject` to the `HttpServerResponse`, and end the response.
-		// * If the `getProduct()` method of the CatalogService returns null, fail the
-		// RoutingContext with a 404 HTTP status code
-		// * If the `getProduct()` method returns a failure, fail the `RoutingContext`.
-		// ----
-	}
-
-	private void addProduct(RoutingContext rc) {
-        JsonObject json = rc.getBodyAsJson();
-        catalogService.addProduct(new Product(json), ar -> {
+    private void getProducts(RoutingContext rc) {
+        circuitBreaker.<JsonArray>execute(future -> {
+            catalogService.getProducts(ar -> {
+                if (ar.succeeded()) {
+                    List<Product> products = ar.result();
+                    JsonArray json = new JsonArray();
+                    products.stream()
+                        .map(p -> p.toJson())
+                        .forEach(p -> json.add(p));
+                    future.complete(json);
+                } else {
+                    future.fail(ar.cause());
+                }
+            });
+        }).setHandler(ar -> {
             if (ar.succeeded()) {
-                rc.response().setStatusCode(201).end();
+                rc.response()
+                    .putHeader("Content-type", "application/json")
+                    .end(ar.result().encodePrettily());
             } else {
-                rc.fail(ar.cause());
+                rc.fail(503);
             }
         });
+    }
+
+	private void getProduct(RoutingContext rc) {
+        String itemId = rc.request().getParam("itemid");
+        circuitBreaker.<JsonObject>execute(future -> {
+            catalogService.getProduct(itemId, ar -> {
+                if (ar.succeeded()) {
+                    Product product = ar.result();
+                    JsonObject json = null;
+                    if (product != null) {
+                        json = product.toJson();
+                    }
+                    future.complete(json);
+                } else {
+                    future.fail(ar.cause());
+                }
+            });
+        }).setHandler(ar -> {
+            if (ar.succeeded()) {
+                if (ar.result() != null) {
+                    rc.response()
+                        .putHeader("Content-type", "application/json")
+                        .end(ar.result().encodePrettily());
+                } else {
+                    rc.fail(404);
+                }
+            } else {
+                rc.fail(503);
+            }
+        });
+    }
+
+	private void addProduct(RoutingContext rc) {
+		JsonObject json = rc.getBodyAsJson();
+		catalogService.addProduct(new Product(json), ar -> {
+			if (ar.succeeded()) {
+				rc.response().setStatusCode(201).end();
+			} else {
+				rc.fail(ar.cause());
+			}
+		});
 		// ----
 		// Needs to be implemented
 		// In the implementation:
@@ -146,19 +160,18 @@ public class ApiVerticle extends AbstractVerticle {
 		// ----
 
 	}
-	
+
 	private void health(Future<io.vertx.ext.healthchecks.Status> future) {
 		catalogService.ping(ar -> {
 			if (ar.succeeded()) {
-				if(!future.isComplete()) {
-					future.complete(Status.OK());	
-				}else {
-					future.complete(Status.KO());	
+				if (!future.isComplete()) {
+					future.complete(Status.OK());
+				} else {
+					future.complete(Status.KO());
 				}
-				
-			}	
+
+			}
 		});
-		
-		
+
 	}
 }

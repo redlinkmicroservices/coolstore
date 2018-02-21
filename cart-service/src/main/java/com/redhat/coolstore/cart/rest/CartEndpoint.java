@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.redhat.coolstore.cart.model.ShoppingCart;
-import com.redhat.coolstore.cart.service.CatalogService;
 import com.redhat.coolstore.cart.service.ShoppingCartService;
 
 @Path("/cart")
@@ -26,9 +25,6 @@ public class CartEndpoint {
 	@Autowired
 	private ShoppingCartService shoppingCartService;
 	
-	@Autowired
-	private CatalogService catalogService; 
-	    
 	@GET
 	@Path("/{cartId}")
 	@Produces(MediaType.APPLICATION_JSON)

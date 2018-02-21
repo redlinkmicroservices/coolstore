@@ -7,6 +7,7 @@ import com.redhat.coolstore.catalog.verticle.service.CatalogService;
 
 import io.vertx.circuitbreaker.CircuitBreaker;
 import io.vertx.circuitbreaker.CircuitBreakerOptions;
+import io.vertx.circuitbreaker.HystrixMetricHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
@@ -54,6 +55,9 @@ public class ApiVerticle extends AbstractVerticle {
 		});
 		HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx).register("health", f -> health(f));
 		router.get("/health/liveness").handler(healthCheckHandler);
+		
+		//Hystrix metrics
+        router.get("/hystrix.stream").handler(HystrixMetricHandler.create(vertx));
 		
 		
 		circuitBreaker = CircuitBreaker.create("product-circuit-breaker", vertx,

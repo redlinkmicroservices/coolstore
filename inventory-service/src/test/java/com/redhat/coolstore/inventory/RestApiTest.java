@@ -63,6 +63,7 @@ public class RestApiTest {
                 .addClass(ErrorInventoryService.class)
                 .addAsWebInfResource("test-beans.xml", "beans.xml")
                 .addAsResource("project-local.yml", "project-local.yml")
+                .addClass(ErrorInventoryService.class)
                 .addAsResource("META-INF/test-persistence.xml",  "META-INF/persistence.xml")
                 .addAsResource("META-INF/test-load.sql",  "META-INF/test-load.sql");
 

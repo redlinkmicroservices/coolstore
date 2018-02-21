@@ -35,7 +35,7 @@ import com.redhat.coolstore.gateway.proxy.CartResource;
 public class CartGateway {
 
 	@Inject
-	@ConfigProperty(name = "CART_SERVICE_URL", defaultValue = "")
+	@ConfigProperty(name = "CART_SERVICE_URL", defaultValue = "http://cart-service-coolstore-cart.192.168.99.100.nip.io:80")
 	private String cartURL;
 
 	@Inject
@@ -51,6 +51,7 @@ public class CartGateway {
 	private boolean hystrixCircuitBreakerEnabled;
 
 	private CartResource buildClient() {
+		System.out.println("group key*******" + hystrixGroupKey);
 		Client client = ClientBuilder.newClient();
 		try {
 			CartResource cartResource = new GetWebTarget(client).execute();
@@ -100,6 +101,7 @@ public class CartGateway {
 		private Client client;
 
 		public GetWebTarget(Client client) {
+			
 			super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(hystrixGroupKey))
 					.andCommandPropertiesDefaults(
 							HystrixCommandProperties.Setter().withCircuitBreakerEnabled(hystrixCircuitBreakerEnabled)

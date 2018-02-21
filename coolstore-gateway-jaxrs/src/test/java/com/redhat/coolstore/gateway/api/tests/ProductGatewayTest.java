@@ -51,6 +51,8 @@ public class ProductGatewayTest {
 		WebArchive archive = ShrinkWrap.create(WebArchive.class, "coolstore-gateway.war")
 				.addPackages(true, RestApplication.class.getPackage())
 				.addPackages(true, ShoppingCartItem.class.getPackage())
+				.addAsResource("project-local.yml", "project-local.yml")
+				.addAsWebInfResource("test-beans.xml", "beans.xml")
 				.addPackages(true, CartResource.class.getPackage()).addClass(UnitTests.class);
 
 		return archive;

@@ -1,5 +1,4 @@
-swarm:
-  hystrix:
+hystrix:
   cart:
     groupKey: cart
     executionTimeout: 2000

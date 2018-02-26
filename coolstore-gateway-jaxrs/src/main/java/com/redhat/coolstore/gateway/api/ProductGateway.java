@@ -19,17 +19,12 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandProperties;
-import com.netflix.hystrix.HystrixCommand.Setter;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
-import com.redhat.coolstore.gateway.api.CartGateway.GetWebTarget;
-import com.redhat.coolstore.gateway.model.Inventory;
 import com.redhat.coolstore.gateway.model.Product;
-import com.redhat.coolstore.gateway.proxy.CartResource;
 import com.redhat.coolstore.gateway.proxy.ProductResource;
 
 @Path("/")
@@ -44,27 +39,27 @@ public class ProductGateway {
 	private String catalogServiceUrl;
 
 	@Inject
-	@ConfigurationValue("hystrix.products.executionTimeout")
+	@ConfigProperty(name = "hystrix.products.executionTimeout", defaultValue="2000")
 	private int hystrixProductsExecutionTimeout;
 
 	@Inject
-	@ConfigurationValue("hystrix.products.groupKey")
+	@ConfigProperty(name = "hystrix.products.groupKey", defaultValue ="product")
 	private String hystrixProductsGroupKey;
 
 	@Inject
-	@ConfigurationValue("hystrix.products.circuitBreakerEnabled")
+	@ConfigProperty(name = "hystrix.products.circuitBreakerEnabled", defaultValue="true")
 	private boolean hystrixProductsCircuitBreakerEnabled;
 
 	@Inject
-	@ConfigurationValue("hystrix.inventory.executionTimeout")
+	@ConfigProperty(name = "hystrix.inventory.executionTimeout", defaultValue="1000")
 	private int hystrixInventoryExecutionTimeout;
 
 	@Inject
-	@ConfigurationValue("hystrix.inventory.groupKey")
+	@ConfigProperty(name = "hystrix.inventory.groupKey", defaultValue="inventory")
 	private String hystrixInventoryGroupKey;
 
 	@Inject
-	@ConfigurationValue("hystrix.inventory.circuitBreakerEnabled")
+	@ConfigProperty(name = "hystrix.inventory.circuitBreakerEnabled", defaultValue="true")
 	private boolean hystrixInventoryCircuitBreakerEnabled;
 
 	private ProductResource buildClient() {

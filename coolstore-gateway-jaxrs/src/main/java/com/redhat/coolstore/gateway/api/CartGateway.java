@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
@@ -39,15 +38,15 @@ public class CartGateway {
 	private String cartURL;
 
 	@Inject
-	@ConfigurationValue("hystrix.cart.executionTimeout")
+	@ConfigProperty(name = "hystrix.cart.executionTimeout", defaultValue="1000")
 	private int hystrixExecutionTimeout;
 
 	@Inject
-	@ConfigurationValue("hystrix.cart.groupKey")
+	@ConfigProperty(name = "hystrix.cart.groupKey", defaultValue="group")
 	private String hystrixGroupKey;
 
 	@Inject
-	@ConfigurationValue("hystrix.cart.circuitBreakerEnabled")
+	@ConfigProperty(name = "hystrix.cart.circuitBreakerEnabled", defaultValue="true")
 	private boolean hystrixCircuitBreakerEnabled;
 
 	private CartResource buildClient() {

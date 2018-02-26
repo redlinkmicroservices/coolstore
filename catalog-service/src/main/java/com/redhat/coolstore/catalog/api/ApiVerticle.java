@@ -42,7 +42,7 @@ public class ApiVerticle extends AbstractVerticle {
 		router.get("/products").handler(this::getProducts);
 		// * A route for HTTP GET requests that matches the /product/:itemId path.
 		router.get("/product/:itemId").handler(this::getProduct);
-
+		
 		// The handler for this route is implemented by the `getProduct()` method.
 		// * A route for the path "/product" to which a `BodyHandler` is attached.
 		router.route("/product").handler(BodyHandler.create());

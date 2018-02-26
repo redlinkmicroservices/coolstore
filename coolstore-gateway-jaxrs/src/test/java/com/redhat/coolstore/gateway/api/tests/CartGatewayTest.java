@@ -20,13 +20,25 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Rule;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.arquillian.CreateSwarm;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.delete;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static io.restassured.RestAssured.given;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonArray;
+
 import com.redhat.coolstore.gateway.api.RestApplication;
 import com.redhat.coolstore.gateway.model.ShoppingCartItem;
 import com.redhat.coolstore.gateway.proxy.CartResource;
@@ -34,6 +46,9 @@ import com.redhat.coolstore.gateway.proxy.CartResource;
 @Category(UnitTests.class)
 @RunWith(Arquillian.class)
 public class CartGatewayTest {
+
+	@Rule
+	public WireMockRule cartMockRule = new WireMockRule(options().port(7071));
 
 	private static String port = System.getProperty("arquillian.swarm.http.port", "18080");
 
@@ -53,6 +68,7 @@ public class CartGatewayTest {
 				.addPackages(true, ShoppingCartItem.class.getPackage())
 				.addAsWebInfResource("test-beans.xml", "beans.xml")
 				.addAsResource("project-local.yml", "project-local.yml")
+				.addAsManifestResource("config-test.properties","microprofile-config.properties")
 				.addPackages(true, CartResource.class.getPackage()).addClass(UnitTests.class);
 
 		return archive;
@@ -71,6 +87,12 @@ public class CartGatewayTest {
 	@Test
 	@RunAsClient
 	public void testGetCart() throws Exception {
+
+		// Mock the Cart service for getting single ShoppingCart instance
+		cartMockRule.stubFor(get(urlMatching("/cart/[a-zA-Z]+"))
+		        .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+		        .withBodyFile("mycart-empty.json")));
+
 		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/cart/").path("/mycart");
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
 
@@ -83,41 +105,63 @@ public class CartGatewayTest {
 	@Test
 	@RunAsClient
 	public void testAddCart() throws Exception {
-		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/cart/").path("/FOO")
-				.path("/329299").path("/2");
+
+		// Mock the Cart service to add items to a cart
+		cartMockRule.stubFor(post(urlMatching("/cart/[a-zA-Z]+/[0-9]+/[0-9]+"))
+		        .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+		        .withBodyFile("mycart-with-items.json")));
+
+		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/cart/").path("/mycart")
+				.path("/165614").path("/2");
 		Response response = target.request(MediaType.APPLICATION_JSON).post(null);
 
 		assertThat(response.getStatus(), equalTo(new Integer(200)));
 		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-		assertThat(value.getString("id", null), equalTo("FOO"));
-		assertThat(value.getDouble("cartItemTotal", 0), equalTo(new Double(69.98)));
+		assertThat(value.getString("id", null), equalTo("mycart"));
+		assertThat(value.getDouble("cartItemTotal", 0), equalTo(new Double(57.5)));
 
 	}
 
 	@Test
 	@RunAsClient
 	public void testDeleteCart() throws Exception {
-		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/cart/").path("/FOO")
-				.path("/329299").path("/2");
+
+		// Mock the Cart service to delete items in a cart
+		cartMockRule.stubFor(delete(urlMatching("/cart/[a-zA-Z]+/[0-9]+/[0-9]+"))
+		        .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+		        .withBodyFile("mycart-item-deleted.json")));
+
+		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/cart/").path("/mycart")
+				.path("/165614").path("/1");
 		Response response = target.request(MediaType.APPLICATION_JSON).delete();
 
 		assertThat(response.getStatus(), equalTo(new Integer(200)));
 		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-		assertThat(value.getString("id", null), equalTo("FOO"));
-		assertThat(value.getInt("quantity", 0), equalTo(new Integer(0)));
+		assertThat(value.getString("id", null), equalTo("mycart"));
+		assertThat(value.getDouble("cartItemTotal", 0), equalTo(new Double(28.75)));
+
+		JsonArray items = value.get("shoppingCartItemList").asArray();
+
+		assertThat(items.get(0).asObject().getInt("quantity", 0), equalTo(new Integer(1)));
 
 	}
 
 	@Test
 	@RunAsClient
 	public void testCheckout() throws Exception {
+
+		// Mock the Cart service to checkout a cart
+		cartMockRule.stubFor(post(urlMatching("/cart/checkout/[a-zA-Z]+"))
+		        .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+		        .withBodyFile("mycart-empty.json")));
+
 		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/cart/").path("/checkout")
-				.path("/FOO");
+				.path("/mycart");
 		Response response = target.request(MediaType.APPLICATION_JSON).post(null);
 
 		assertThat(response.getStatus(), equalTo(new Integer(200)));
 		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-		assertThat(value.getString("id", null), equalTo("FOO"));
+		assertThat(value.getString("id", null), equalTo("mycart"));
 		assertThat(value.getDouble("cartItemTotal", 0), equalTo(new Double(0.0)));
 
 	}

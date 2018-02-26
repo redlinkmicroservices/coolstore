@@ -20,10 +20,18 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Rule;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.arquillian.CreateSwarm;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static io.restassured.RestAssured.given;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
@@ -34,6 +42,9 @@ import com.redhat.coolstore.gateway.proxy.CartResource;
 @Category(UnitTests.class)
 @RunWith(Arquillian.class)
 public class ProductGatewayTest {
+
+	@Rule
+	public WireMockRule catalogMockRule = new WireMockRule(options().port(7070));
 
 	private static String port = System.getProperty("arquillian.swarm.http.port", "18080");
 
@@ -53,6 +64,7 @@ public class ProductGatewayTest {
 				.addPackages(true, ShoppingCartItem.class.getPackage())
 				.addAsResource("project-local.yml", "project-local.yml")
 				.addAsWebInfResource("test-beans.xml", "beans.xml")
+				.addAsManifestResource("config-test.properties","microprofile-config.properties")
 				.addPackages(true, CartResource.class.getPackage()).addClass(UnitTests.class);
 
 		return archive;
@@ -71,6 +83,12 @@ public class ProductGatewayTest {
 	@Test
 	@RunAsClient
 	public void getProducts() throws Exception {
+
+		// Mock the Catalog service 
+		catalogMockRule.stubFor(get(urlMatching("/products"))
+		        .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+		        .withBodyFile("products.json")));
+
 		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/products");
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
 
@@ -82,6 +100,12 @@ public class ProductGatewayTest {
 	@Test
 	@RunAsClient
 	public void getProduct() throws Exception {
+
+		// Mock the Catalog service 
+		catalogMockRule.stubFor(get(urlMatching("/product/[0-9]+"))
+		        .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+		        .withBodyFile("product-329299.json")));
+
 		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/product").path("/329299");
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
 

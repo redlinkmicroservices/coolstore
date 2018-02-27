@@ -6,7 +6,7 @@ ex. `oc create configmap gatewaycatalog --from-literal=CATALOG_SERVICE_URL=http:
 
 and
 
-ex. `oc create configmap gatewaycart --from-literal=CART_SERVICE_URL=http://cart-service-coolstore-cart.192.168.99.100.nip.io:80
+ex. `oc create configmap gatewaycart --from-literal=CART_SERVICE_URL=http://cart-service-coolstore-cart.192.168.99.100.nip.io:80`
 
 
 3. Run fabric8 to deploy:

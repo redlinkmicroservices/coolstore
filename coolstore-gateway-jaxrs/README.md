@@ -18,3 +18,10 @@ ex. `oc create configmap gatewaycart --from-literal=CART_SERVICE_URL=http://cart
 `oc set env dc/coolstore-gateway --from=configmap/gatewaycatalog`
 
 `oc set env dc/coolstore-gateway --from=configmap/gatewaycart`
+
+5. To test the API:
+
+  curl http://coolstore-gateway-coolstore-gateway.apps.lab.example.com/api/product/165614
+  curl http://coolstore-gateway-coolstore-gateway.apps.lab.example.com/api/cart/mycart
+  curl -X POST http://coolstore-gateway-coolstore-gateway.apps.lab.example.com/api/cart/mycart/165614/2
+

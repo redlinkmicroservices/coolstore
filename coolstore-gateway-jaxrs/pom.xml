@@ -170,7 +170,7 @@
 								<config>
 									<wildfly-swarm>
 										<fromMode>isTag</fromMode>
-										<from>redhat-openjdk18-openshift:1.1</from>
+										<from>redhat-openjdk18-openshift</from>
 									</wildfly-swarm>
 								</config>
 								<excludes>

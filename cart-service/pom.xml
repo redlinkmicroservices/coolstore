@@ -136,7 +136,7 @@
 								<config>
 									<spring-boot>
 										<fromMode>isTag</fromMode>
-										<from>redhat-openjdk18-openshift:1.1</from>
+										<from>redhat-openjdk18-openshift</from>
 									</spring-boot>
 								</config>
 							</generator>

@@ -1,5 +1,43 @@
 Vert.x Lab for GPTE Modern App Dev - Microservices development with RHOAR course - Completed Lab
 
+---- Begin For UCF ---
+It looks like Minishift auto provision the volumes. For UCF we need to create them
+
+1. ssh root@services to create the NFS shares
+
+# mkdir -p /var/exports/vol01
+# mkdir -p /var/exports/vol02
+# chown nfsnobody:nfsnobody /var/exports/vol*
+# chmod a+rwx /var/exports/vol*
+
+2. Export the NFS shares
+
+[root@services ~]# cat /etc/exports.d/do292-volumes.exports 
+/var/exports/vol01 *(rw,root_squash)
+/var/exports/vol02 *(rw,root_squash)
+
+# exportfs -a
+
+3. ssh root@master to create the PVs
+
+# oc create -f vol-pv.yaml
+
+[root@master ~]# oc get pv
+NAME              CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS      CLAIM                    STORAGECLASS   REASON    AGE
+registry-volume   10Gi       RWX           Retain          Bound       default/registry-claim                            2d
+vol01             1Gi        RWO           Recycle         Available                                                     1s
+vol02             1Gi        RWO           Recycle         Available 
+
+4. After you deploy mongodb, verify the PVC is bound:
+
+[student@workstation catalog-service]$ oc new-app -f ocp/coolstore-catalog-mongodb-persistent.yaml -p CATALOG_DB_USERNAME=mongo -p CATALOG_DB_PASSWORD=mongo
+[student@workstation catalog-service]$ oc get pvc
+NAME              STATUS    VOLUME    CAPACITY   ACCESSMODES   STORAGECLASS   AGE
+mongodb-data-pv   Bound     vol01     1Gi        RWO                          5m
+
+
+---- End For UCF ---
+
 1. export CATALOG_PRJ=coolstore-catalog
 2. oc process -f ocp/coolstore-catalog-mongodb-persistent.yaml -p CATALOG_DB_USERNAME=mongo -p CATALOG_DB_PASSWORD=mongo -n $CATALOG_PRJ | oc create -f - -n $CATALOG_PRJ
 3. oc policy add-role-to-user view -z default -n $CATALOG_PRJ

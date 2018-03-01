@@ -15,6 +15,41 @@ mongodb-data-pv           Bound     vol01     1Gi        RWO                    
 
 3. If you need to retry, you need to manually delete the PV and clean the NFS share. It looks like recycling is not working
 
+4. It looks like test data loading always fail the first time:
+
+[student@workstation inventory-service]$ oc get pod
+NAME                               READY     STATUS    RESTARTS   AGE
+inventory-postgresql-1-deploy      0/1       Error     0          6m
+inventory-postgresql-1-hook-post   0/1       Error     0          3m
+
+If this happen, just try again:
+
+[student@workstation inventory-service]$ oc rollout latest dc/inventory-postgresql
+
+After a while:
+
+[student@workstation inventory-service]$ oc get pod
+NAME                               READY     STATUS    RESTARTS   AGE
+inventory-postgresql-1-deploy      0/1       Error     0          8m
+inventory-postgresql-1-hook-post   0/1       Error     0          5m
+inventory-postgresql-2-vkgfm       1/1       Running   0          1m
+
+The database has product data, so I assume the hook worked the second time.
+
+[student@workstation inventory-service]$ oc rsh -t inventory-postgresql-2-vkgfm
+sh-4.2$ psql inventorydb jboss
+psql (9.5.9)
+Type "help" for help.
+
+inventorydb=> select count(*) from product_inventory ;
+ count 
+-------
+     8
+(1 row)
+
+inventorydb=> \q
+sh-4.2$ exit
+
 --- End UCF ---
 
 1. Create a new project in OCP

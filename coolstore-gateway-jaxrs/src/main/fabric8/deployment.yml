@@ -28,4 +28,16 @@ spec:
               memory: 1Gi
             requests:
               cpu: 200m
-              memory: 200Mi
+              memory: 512Mi
+          env:
+            - name: CATALOG_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: CATALOG_SERVICE_URL
+                  name: gatewaycatalog
+            - name: CART_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: CART_SERVICE_URL
+                  name: gatewaycart
+

@@ -46,8 +46,8 @@ objects:
     strategy:
       sourceStrategy:
         env:
-        - name: NPM_PROXY
-          value: ${NPM_PROXY}
+        - name: npm_config_registry
+          value: ${NPM_MIRROR}
         from:
           kind: ImageStreamTag
           name: nodejs:6
@@ -156,9 +156,9 @@ parameters:
   generate: expression
   required: true
 - description: Npm mirror URL
-  name: NPM_PROXY
+  name: NPM_MIRROR
   required: false
-  value: http://services.lab.example.com:8081/nexus/content/groups/nodej
+  value: http://services.lab.example.com:8081/nexus/content/groups/nodejs
 - description: Git repository URL
   name: GIT_REPO
   required: true

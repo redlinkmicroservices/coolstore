@@ -1,11 +1,3 @@
 node_modules
-bower_components
-target/
 .DS_Store
-*.classpath
-*.settings
-*.tern*
-.security/
-*.jar
-*.iml
 *.log

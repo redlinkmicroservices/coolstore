@@ -1,3 +1,4 @@
+This was modified to use npm to load bower dependencies. Ignore bower.json
 
 ---- End UCF ---
 

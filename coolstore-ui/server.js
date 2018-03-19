@@ -35,7 +35,9 @@ app.get('/coolstore.json', function (req, res, next) {
 
 app.use(express.static(path.join(__dirname, '/views')));
 app.use('/app', express.static(path.join(__dirname, '/app')));
-app.use('/bower_components', express.static(path.join(__dirname, '/node_modules')));
+//app.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
+//app.use('/bower_components', express.static(path.join(__dirname, '/node_modules')));
+app.use('/dist', express.static(path.join(__dirname, '/views/dist')));
 
 console.log("coolstore config: " + JSON.stringify(coolstoreConfig));
 console.log("keycloak config: " + JSON.stringify(keycloakConfig));

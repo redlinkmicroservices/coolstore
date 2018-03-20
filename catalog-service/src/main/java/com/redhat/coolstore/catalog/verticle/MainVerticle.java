@@ -61,8 +61,14 @@ public class MainVerticle extends AbstractVerticle {
 		//
 		// * Create a proxy for the `CatalogService`.
 		CatalogService proxy = CatalogService.createProxy(vertx);
+		
 		// * Create an instance of `ApiVerticle` and `CatalogVerticle`
 		// * Deploy the verticles
+		// * Make sure to pass the verticle configuration object as part of the
+		// deployment options
+		// * Use `Future` objects to get notified of successful deployment (or failure)
+		// of the verticle deployments.
+		
 		DeploymentOptions options = new DeploymentOptions();
 		options.setConfig(config);
 		ApiVerticle apiVerticle = new ApiVerticle(proxy);
@@ -72,13 +78,12 @@ public class MainVerticle extends AbstractVerticle {
 		CatalogVerticle catalogVerticle = new CatalogVerticle();
 		Future<String> catalogVerticleFuture = Future.future();
 		vertx.deployVerticle(catalogVerticle, options, catalogVerticleFuture.completer());
-		// * Make sure to pass the verticle configuration object as part of the
-		// deployment options
-
-		// * Use `Future` objects to get notified of successful deployment (or failure)
-		// of the verticle deployments.
 
 		// * Use a `CompositeFuture` to coordinate the deployment of both verticles.
+		// * Complete or fail the `startFuture` depending on the result of the
+		// CompositeFuture
+		//
+		// ----
 		CompositeFuture.all(apiVerticleFuture, catalogVerticleFuture).setHandler(handler -> {
 			if (handler.succeeded()) {
 				startFuture.complete();
@@ -86,10 +91,6 @@ public class MainVerticle extends AbstractVerticle {
 				startFuture.fail(handler.cause());
 			}
 		});
-		// * Complete or fail the `startFuture` depending on the result of the
-		// CompositeFuture
-		//
-		// ----
 
 	}
 

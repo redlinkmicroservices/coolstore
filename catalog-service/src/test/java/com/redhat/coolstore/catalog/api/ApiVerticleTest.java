@@ -139,8 +139,10 @@ public class ApiVerticleTest {
 
         doAnswer(new Answer<Void>() {
             public Void answer(InvocationOnMock invocation){
-                Handler<AsyncResult<Product>> handler = invocation.getArgument(1);
-                handler.handle(Future.succeededFuture(product));
+                /*
+                 * TODO check the mocked call arguments
+                 * Return the product from the mocked call
+                 */
                 return null;
              }
          }).when(catalogService).getProduct(any(),any());
@@ -152,10 +154,11 @@ public class ApiVerticleTest {
 		 * Assert that the 'Content-Type' header indicates JSON content
 		 * Get the response body as a JsonObject
 		 * Assert that the JsonObject can be converted into a Product object
+		 * Assert that the returned product has the correct id
+		 * Assert that the returned product has the correct price
 		 * Verify that the mocked CatalogService.getProduct method was called
 		 * Do not forget to call the TestContext exceptionHandler method 
 		 * and wait for the TestContext to complete async calls
-		 * XXX would be better to test actual result than mocked was called
 		 */
 		async.complete();
 		fail("Not implemented yet");

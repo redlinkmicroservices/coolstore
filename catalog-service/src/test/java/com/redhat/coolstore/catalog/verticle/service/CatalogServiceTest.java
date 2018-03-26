@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,59 +88,13 @@ public class CatalogServiceTest extends MongoTestBase {
         // 
         // In your test:
         // -Insert two or more products in MongoDB. Use the `MongoClient.save` method to do so.
-    	Async saveAsync = context.async(2);
-        String itemId1 = "111111";
-        JsonObject json1 = new JsonObject()
-                .put("itemId", itemId1)
-                .put("name", "productName1")
-                .put("desc", "productDescription1")
-                .put("price", new Double(100.0));
-
-		//...
-    	mongoClient.save("products", json1 , ar -> {
-    	    if (ar.failed()) {
-    	        context.fail();
-    	    }
-    	    saveAsync.countDown();
-    	});
-        String itemId2 = "222222";
-        JsonObject json2 = new JsonObject()
-                .put("itemId", itemId2)
-                .put("name", "productName2")
-                .put("desc", "productDescription2")
-                .put("price", new Double(100.0));
-
-        mongoClient.save("products", json2, ar -> {
-            if (ar.failed()) {
-                context.fail();
-            }
-            saveAsync.countDown();
-        });
-
-        saveAsync.await();
-
         // - Retrieve the products from Mongo using the `testGetProducts` method.
-        CatalogService service = new CatalogServiceImpl(vertx, getConfig(), mongoClient);
-        Async async = context.async();
-
-        service.getProducts(ar -> {
-            if (ar.failed()) {
-                context.fail(ar.cause().getMessage());
-            } else {
-                assertThat(ar.result(), notNullValue());
-                assertThat(ar.result().size(), equalTo(2));
-                Set<String> itemIds = ar.result().stream().map(p -> p.getItemId()).collect(Collectors.toSet());
-                assertThat(itemIds.size(), equalTo(2));
-                assertThat(itemIds, allOf(hasItem(itemId1),hasItem(itemId2)));
-                async.complete();
-            }
-        });
-
         // - Verify that no failures happened, 
         //   that the number of products retrieved corresponds to the number inserted, 
         //   and that the product values match what was inserted.
         // 
         // ----
+    	fail("Not implemented yet");
     }
 
     @Test

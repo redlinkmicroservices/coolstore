@@ -61,6 +61,13 @@ public class CatalogServiceImpl implements CatalogService {
 	@Override
 	public void ping(Handler<AsyncResult<String>> resultHandler) {
 		resultHandler.handle(Future.succeededFuture("OK"));
+//		client.runCommand("ping", null, ar -> {
+//			if (ar.succeeded()) {
+//				resultHandler.handle(Future.succeededFuture(null));
+//			} else {
+//				resultHandler.handle(Future.failedFuture(ar.cause()));
+//			}
+//		});
 	}
 
 	private JsonObject toDocument(Product product) {

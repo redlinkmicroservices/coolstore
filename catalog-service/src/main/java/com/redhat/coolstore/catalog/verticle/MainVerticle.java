@@ -4,9 +4,6 @@ import com.redhat.coolstore.catalog.api.ApiVerticle;
 import com.redhat.coolstore.catalog.verticle.service.CatalogService;
 import com.redhat.coolstore.catalog.verticle.service.CatalogVerticle;
 
-import io.vertx.config.ConfigRetriever;
-import io.vertx.config.ConfigRetrieverOptions;
-import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.DeploymentOptions;
@@ -22,36 +19,21 @@ public class MainVerticle extends AbstractVerticle {
 		// To be implemented
 		//
 		// * Create a `ConfigStoreOptions` instance.
-		ConfigStoreOptions appStore = new ConfigStoreOptions();
-		
-		
-
 		// * Set the type to "configmap" and the format to "yaml".
-		appStore.setType("configmap").setFormat("yaml");
 		// * Configure the `ConfigStoreOptions` instance with the name and the key of
 		// the configmap
-		appStore.setConfig(new JsonObject().put("name", "app-config").put("key", "app-config.yaml"));
 		// * Create a `ConfigRetrieverOptions` instance
-		ConfigRetrieverOptions configRetrieverOptions = new ConfigRetrieverOptions();
 		// * Add the `ConfigStoreOptions` instance as store to the
 		// `ConfigRetrieverOptions` instance
-		configRetrieverOptions.addStore(appStore);
 		// * Create a `ConfigRetriever` instance with the `ConfigRetrieverOptions`
 		// instance
-		ConfigRetriever retriever = ConfigRetriever.create(vertx, configRetrieverOptions);
 		// * Use the `ConfigRetriever` instance to retrieve the configuration
-		retriever.getConfig(handler->{
-			// * If the retrieval was successful, call the `deployVerticles` method,
-			// otherwise fail the `startFuture` object.
-			if(handler.succeeded()) {
-				deployVerticles(handler.result(), startFuture);
-			}else {
-				startFuture.fail(handler.cause());
-			}
-		});
-
+		// * If the retrieval was successful, call the `deployVerticles` method,
+		// otherwise fail the `startFuture` object.
 		//
 		// ----
+		JsonObject config = new JsonObject();
+		deployVerticles(config, startFuture);
 	}
 
 	private void deployVerticles(JsonObject config, Future<Void> startFuture) {

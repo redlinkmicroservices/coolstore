@@ -20,7 +20,8 @@ It looks like Minishift auto provision the volumes. For UCF we need to create th
 
 3. ssh root@master to create the PVs
 
-# oc create -f vol-pv.yaml
+# oc create -f vol01-pv.yaml
+# oc create -f vol02-pv.yaml
 
 [root@master ~]# oc get pv
 NAME              CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS      CLAIM                    STORAGECLASS   REASON    AGE

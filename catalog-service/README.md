@@ -1,6 +1,7 @@
 Vert.x Lab for GPTE Modern App Dev - Microservices development with RHOAR course - Completed Lab
 
----- Begin For UCF ---
+Without circuit breaker stuff
+
 It looks like Minishift auto provision the volumes. For UCF we need to create them
 
 1. ssh root@services to create the NFS shares
@@ -37,10 +38,9 @@ NAME              STATUS    VOLUME    CAPACITY   ACCESSMODES   STORAGECLASS   AG
 mongodb-data-pv   Bound     vol01     1Gi        RWO                          5m
 
 
----- End For UCF ---
+5. oc policy add-role-to-user view -z default
 
-1. export CATALOG_PRJ=coolstore-catalog
-2. oc process -f ocp/coolstore-catalog-mongodb-persistent.yaml -p CATALOG_DB_USERNAME=mongo -p CATALOG_DB_PASSWORD=mongo -n $CATALOG_PRJ | oc create -f - -n $CATALOG_PRJ
-3. oc policy add-role-to-user view -z default -n $CATALOG_PRJ
-4. oc create configmap app-config --from-file=etc/app-config.yaml -n $CATALOG_PRJ
-5. mvn clean fabric8:deploy -Popenshift -Dfabric8.namespace=$CATALOG_PRJ
+6. oc create configmap app-config --from-file=etc/app-config.yaml
+
+7. mvn clean fabric8:deploy -DskipTests
+

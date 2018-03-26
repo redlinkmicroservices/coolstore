@@ -5,9 +5,6 @@ import java.util.List;
 import com.redhat.coolstore.catalog.model.Product;
 import com.redhat.coolstore.catalog.verticle.service.CatalogService;
 
-import io.vertx.circuitbreaker.CircuitBreaker;
-import io.vertx.circuitbreaker.CircuitBreakerOptions;
-import io.vertx.circuitbreaker.HystrixMetricHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
@@ -21,8 +18,6 @@ import io.vertx.ext.web.handler.BodyHandler;
 public class ApiVerticle extends AbstractVerticle {
 
 	private CatalogService catalogService;
-
-	private CircuitBreaker circuitBreaker;
 
 	public ApiVerticle(CatalogService catalogService) {
 		this.catalogService = catalogService;
@@ -56,17 +51,6 @@ public class ApiVerticle extends AbstractVerticle {
 		HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx).register("health", f -> health(f));
 		router.get("/health/liveness").handler(healthCheckHandler);
 		
-		//Hystrix metrics
-        router.get("/hystrix.stream").handler(HystrixMetricHandler.create(vertx));
-		
-		
-		circuitBreaker = CircuitBreaker.create("product-circuit-breaker", vertx,
-				new CircuitBreakerOptions().setMaxFailures(3) // number of failure before opening the circuit
-						.setTimeout(1000) // consider a failure if the operation does not succeed in time
-						.setFallbackOnFailure(true) // do we call the fallback on failure
-						.setResetTimeout(5000) // time spent in open state before attempting to re-try
-		);
-
 		// ----
 		// Create a HTTP server.
 		// * Use the `Router` as request handler
@@ -88,56 +72,41 @@ public class ApiVerticle extends AbstractVerticle {
 	}
 
     private void getProducts(RoutingContext rc) {
-        circuitBreaker.<JsonArray>execute(future -> {
-            catalogService.getProducts(ar -> {
-                if (ar.succeeded()) {
-                    List<Product> products = ar.result();
-                    JsonArray json = new JsonArray();
-                    products.stream()
-                        .map(p -> p.toJson())
-                        .forEach(p -> json.add(p));
-                    future.complete(json);
-                } else {
-                    future.fail(ar.cause());
-                }
-            });
-        }).setHandler(ar -> {
+        catalogService.getProducts(ar -> {
             if (ar.succeeded()) {
+                List<Product> products = ar.result();
+                JsonArray json = new JsonArray();
+                products.stream()
+                    .map(p -> p.toJson())
+                    .forEach(p -> json.add(p));
                 rc.response()
-                    .putHeader("Content-type", "application/json")
-                    .end(ar.result().encodePrettily());
-            } else {
-                rc.fail(503);
+                	.putHeader("Content-type", "application/json")
+                	.end(json.encodePrettily());
+            }
+            else {
+                rc.fail(ar.cause());
             }
         });
     }
 
 	private void getProduct(RoutingContext rc) {
         String itemId = rc.request().getParam("itemid");
-        circuitBreaker.<JsonObject>execute(future -> {
-            catalogService.getProduct(itemId, ar -> {
-                if (ar.succeeded()) {
-                    Product product = ar.result();
-                    JsonObject json = null;
-                    if (product != null) {
-                        json = product.toJson();
-                    }
-                    future.complete(json);
-                } else {
-                    future.fail(ar.cause());
-                }
-            });
-        }).setHandler(ar -> {
+        catalogService.getProduct(itemId, ar -> {
             if (ar.succeeded()) {
-                if (ar.result() != null) {
+                Product product = ar.result();
+                JsonObject json = null;
+                if (product != null) {
+                    json = product.toJson();
                     rc.response()
-                        .putHeader("Content-type", "application/json")
-                        .end(ar.result().encodePrettily());
-                } else {
+		                .putHeader("Content-type", "application/json")
+		                .end(json.encodePrettily());
+                }
+                else {
                     rc.fail(404);
                 }
-            } else {
-                rc.fail(503);
+            }
+            else {
+                rc.fail(ar.cause());
             }
         });
     }

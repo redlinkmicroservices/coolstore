@@ -152,6 +152,8 @@ public class ApiVerticleTest {
 				JsonObject json = body.toJsonObject();
 				Product productResult = new Product(json);
 				assertThat(productResult, notNullValue());
+				assertThat(productResult.getItemId(), equalTo("111111"));
+				assertThat(productResult.getPrice(), equalTo(100.0));
 				verify(catalogService).getProduct(any(),any());
 				async.complete();
 			}).exceptionHandler(context.exceptionHandler());

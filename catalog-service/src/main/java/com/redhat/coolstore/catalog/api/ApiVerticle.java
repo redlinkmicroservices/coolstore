@@ -31,30 +31,16 @@ public class ApiVerticle extends AbstractVerticle {
 		// Add routes to the Router
 		// * A route for HTTP GET requests that matches the "/products" path.
 		// The handler for this route is implemented by the `getProducts()` method.
-
-		router.get("/products").handler(this::getProducts);
 		// * A route for HTTP GET requests that matches the /product/:itemId path.
-		router.get("/product/:itemId").handler(this::getProduct);
-		
 		// The handler for this route is implemented by the `getProduct()` method.
 		// * A route for the path "/product" to which a `BodyHandler` is attached.
-		router.route("/product").handler(BodyHandler.create());
 		// * A route for HTTP POST requests that matches the "/product" path.
-		router.post("/product").handler(this::addProduct);
 		// The handler for this route is implemented by the `addProduct()` method.
 		// ----
 		
 		// ----
 		// Create a HTTP server.
 		// * Use the `Router` as request handler
-		vertx.createHttpServer().requestHandler(router::accept).listen(config().getInteger("catalog.http.port", 8080),
-				result -> {
-					if (result.succeeded()) {
-						startFuture.complete();
-					} else {
-						startFuture.fail(result.cause());
-					}
-				});
 		// * Use the verticle configuration to obtain the port to listen to.
 		// Get the configuration from the `config()` method of AbstractVerticle.
 		// Look for the key "catalog.http.host", which returns an Integer.
@@ -62,24 +48,22 @@ public class ApiVerticle extends AbstractVerticle {
 		// * If the HTTP server is correctly instantiated, complete the `Future`. If
 		// there is a failure, fail the `Future`.
 		// ----
+		vertx.createHttpServer().listen(config().getInteger("catalog.http.port", 8080),
+				result -> {
+					if (result.succeeded()) {
+						startFuture.complete();
+					} else {
+						startFuture.fail(result.cause());
+					}
+				});
 	}
 
     private void getProducts(RoutingContext rc) {
-        catalogService.getProducts(ar -> {
-            if (ar.succeeded()) {
-                List<Product> products = ar.result();
-                JsonArray json = new JsonArray();
-                products.stream()
-                    .map(p -> p.toJson())
-                    .forEach(p -> json.add(p));
-                rc.response()
-                	.putHeader("Content-type", "application/json")
-                	.end(json.encodePrettily());
-            }
-            else {
-                rc.fail(ar.cause());
-            }
-        });
+    	// ----
+    	// * Call getProducts from the CatalogService instance
+    	// * From the List<Product> create a JsonArray instance
+    	// * Return the JsonArray as the requeest response
+    	// * Do not forget to set the 'Content-Type' 
     }
 
 	private void getProduct(RoutingContext rc) {
@@ -105,14 +89,6 @@ public class ApiVerticle extends AbstractVerticle {
     }
 
 	private void addProduct(RoutingContext rc) {
-		JsonObject json = rc.getBodyAsJson();
-		catalogService.addProduct(new Product(json), ar -> {
-			if (ar.succeeded()) {
-				rc.response().setStatusCode(201).end();
-			} else {
-				rc.fail(ar.cause());
-			}
-		});
 		// ----
 		// Needs to be implemented
 		// In the implementation:

@@ -4,19 +4,17 @@ import java.util.List;
 
 import com.redhat.coolstore.catalog.model.Product;
 
-import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
-@ProxyGen
 public interface CatalogService {
 
     final static String ADDRESS = "catalog-service"; 
 
     static CatalogService create(Vertx vertx, JsonObject config, MongoClient client) {
-        return new CatalogServiceImpl(vertx, config, client);
+        return null;
     }
 
     //----
@@ -29,7 +27,7 @@ public interface CatalogService {
 
     
     static CatalogService createProxy(Vertx vertx) {
-            return new CatalogServiceVertxEBProxy(vertx, ADDRESS);
+    	return null;
         }
     
     void getProducts(Handler<AsyncResult<List<Product>>> resulthandler);

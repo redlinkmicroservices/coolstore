@@ -2,9 +2,7 @@ package com.redhat.coolstore.catalog.model;
 
 import java.io.Serializable;
 
-import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
-@DataObject
 public class Product implements Serializable {
 
     private static final long serialVersionUID = -6994655395272795259L;

@@ -2,30 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.redhat.coolstore</groupId>
+    <artifactId>coolstore-parent</artifactId>
+    <version>1.0</version>
+  </parent>
+
   <groupId>com.redhat.coolstore</groupId>
   <artifactId>catalog-service</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
+  
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <version.vertx>3.4.2.redhat-006</version.vertx>
-    <version.vertx-maven-plugin>1.0.7</version.vertx-maven-plugin>
-    <version.fabric8-maven-plugin>3.5.34</version.fabric8-maven-plugin>
     <vertx.verticle>com.redhat.coolstore.catalog.verticle.MainVerticle</vertx.verticle>
   </properties>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.vertx</groupId>
-        <artifactId>vertx-dependencies</artifactId>
-        <version>${version.vertx}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  
   <dependencies>
     <dependency>
       <groupId>io.vertx</groupId>
@@ -81,7 +72,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>${version.compiler.plugin}</version>
         <configuration>
           <annotationProcessors>
             <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>

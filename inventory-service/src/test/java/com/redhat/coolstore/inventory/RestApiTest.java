@@ -127,13 +127,13 @@ public class RestApiTest {
         assertThat(value.getString("id", ""), equalTo("server-state"));
         assertThat(value.getString("result", ""), equalTo("UP"));
     }
-    
+
     @Test
     @RunAsClient
     public void testError() throws Exception {
         WebTarget target = client.target("http://localhost:" + port).path("/inventory").path("/error");
         Response response = target.request(MediaType.APPLICATION_JSON).get();
-        assertThat(response.getStatus(), equalTo(new Integer(503)));
+        assertThat(response.getStatus(), equalTo(new Integer(500)));
     }
 
 }

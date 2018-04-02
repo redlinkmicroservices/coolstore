@@ -4,7 +4,7 @@ spec:
       containers:
         - readinessProbe:
             httpGet:
-              path: /health
+              path: # Add readiness probe URL
               port: 8080
               scheme: HTTP
             failureThreshold: 3
@@ -14,7 +14,7 @@ spec:
             timeoutSeconds: 1
           livenessProbe:
             httpGet:
-              path: /health
+              path: # Add liveness probe URL
               port: 8080
               scheme: HTTP
             failureThreshold: 2
@@ -24,8 +24,8 @@ spec:
             timeoutSeconds: 1
           resources:
             limits:
-              cpu: 1
-              memory: 1Gi
+              cpu: # Add CPU limit
+              memory: # Add memory limit
             requests:
               cpu: 100m
               memory: 500Mi
@@ -33,15 +33,17 @@ spec:
             - name: config
               mountPath: /app/config
           env:
+            # Add the swarm.project.stage.file property to the JAVA_OPTIONS attribute.
+            # Provide full path to the project-defaults.yml file as the value of the property.
             - name: JAVA_OPTIONS
-              value: "-Dswarm.project.stage.file=file:///app/config/project-defaults.yml"
+              value:
             - name: GC_MAX_METASPACE_SIZE
               value: '200'
             - name: AB_JOLOKIA_OFF
               value: 'true'
             - name: AB_OFF
-              value: 'true'          
+              value: 'true'
       volumes:
         - configMap:
-            name: app-config
+            name: # Add ConfigMap reference
           name: config

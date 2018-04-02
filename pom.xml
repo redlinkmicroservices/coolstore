@@ -11,80 +11,56 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+        <modelVersion>4.0.0</modelVersion>
+        <groupId>com.redhat.coolstore</groupId>
+        <artifactId>coolstore-parent</artifactId>
+        <version>1.0</version>
+        <packaging>pom</packaging>
 
-	<groupId>com.redhat.coolstore</groupId>
-	<artifactId>coolstore-parent</artifactId>
-	<version>1.0</version>
-	<packaging>pom</packaging>
+        <name>Red Hat Training Coolstore Parent</name>
+        <description>This is the parent POM for the Red Hat Training Coolstore App</description>
 
-	<name>Red Hat Training Coolstore Parent</name>
-	<description>This is the parent POM for the Red Hat Training Coolstore App</description>
+        <licenses>
+          <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          </license>
+        </licenses>
 
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.wildfly.swarm>2017.12.1</version.wildfly.swarm>
-		<version.compiler.plugin>3.1</version.compiler.plugin>
-		<version.surefire.plugin>2.16</version.surefire.plugin>
-		<version.war.plugin>2.5</version.war.plugin>
-		<version.fabric8-maven-plugin>3.5.34</version.fabric8-maven-plugin>
-    <fabric8.generator.fromMode>istag</fabric8.generator.fromMode>
-    <fabric8.generator.from>redhat-openjdk18-openshift</fabric8.generator.from>
-		<version.resteasy>3.0.24.Final</version.resteasy>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<openfeign.version>9.4.0</openfeign.version>
-		<openfeign.opentracing.version>0.0.3</openfeign.opentracing.version>
-		<opentracing.version>0.22.0</opentracing.version>
-		<opentracing.web.servlet.filter.version>0.0.8</opentracing.web.servlet.filter.version>
-		<jaeger.version>0.19.0</jaeger.version>
-		<swagger.version>1.5.8</swagger.version>
-		<version.microprofile>1.2</version.microprofile>
-		<arquillian.version>1.1.15.Final</arquillian.version>
-		<mockito.version>1.10.19</mockito.version>
-		<hamcrest.version>1.3</hamcrest.version>
-		<version.restassured>3.0.7</version.restassured>
-		<version.wiremock>2.15.0</version.wiremock>
-		<version.hystrix>1.5.9</version.hystrix>
-		<version.nimbus>4.23</version.nimbus>
-		<spring-boot.bom.version>1.5.8.Final-redhat-1</spring-boot.bom.version>
-		<version.spring-boot>1.5.8.RELEASE</version.spring-boot>
-		<version.vertx>3.4.2.redhat-006</version.vertx>
-		<version.vertx-maven-plugin>1.0.7</version.vertx-maven-plugin>
-		<hystrix.version>1.5.12</hystrix.version>
-	</properties>
-
-	<dependencyManagement>
-		<dependencies>
-      <dependency>
-				<groupId>org.wildfly.swarm</groupId>
-				<artifactId>bom</artifactId>
-				<version>${version.wildfly.swarm}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>me.snowdrop</groupId>
-				<artifactId>spring-boot-bom</artifactId>
-				<version>${spring-boot.bom.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>io.vertx</groupId>
-				<artifactId>vertx-dependencies</artifactId>
-				<version>${version.vertx}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+        <properties>
+          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+          <version.wildfly.swarm>2017.12.1</version.wildfly.swarm>
+          <version.compiler.plugin>3.1</version.compiler.plugin>
+          <version.surefire.plugin>2.16</version.surefire.plugin>
+          <version.war.plugin>2.5</version.war.plugin>
+          <version.fabric8-maven-plugin>3.5.34</version.fabric8-maven-plugin>
+          <fabric8.generator.fromMode>istag</fabric8.generator.fromMode>
+          <fabric8.generator.from>redhat-openjdk18-openshift</fabric8.generator.from>
+          <version.resteasy>3.0.24.Final</version.resteasy>
+          <maven.compiler.target>1.8</maven.compiler.target>
+          <maven.compiler.source>1.8</maven.compiler.source>
+          <openfeign.version>9.4.0</openfeign.version>
+          <openfeign.opentracing.version>0.0.3</openfeign.opentracing.version>
+          <opentracing.version>0.22.0</opentracing.version>
+          <opentracing.web.servlet.filter.version>0.0.8</opentracing.web.servlet.filter.version>
+          <jaeger.version>0.19.0</jaeger.version>
+          <swagger.version>1.5.8</swagger.version>
+          <version.microprofile>1.2</version.microprofile>
+          <arquillian.version>1.1.15.Final</arquillian.version>
+          <mockito.version>2.7.22</mockito.version>
+          <hamcrest.version>1.3</hamcrest.version>
+          <version.restassured>3.0.7</version.restassured>
+          <version.wiremock>2.15.0</version.wiremock>
+          <version.hystrix>1.5.9</version.hystrix>
+          <version.nimbus>4.23</version.nimbus>
+          <spring-boot.bom.version>1.5.8.Final-redhat-1</spring-boot.bom.version>
+          <version.spring-boot>1.5.8.RELEASE</version.spring-boot>
+          <version.vertx>3.4.2.redhat-006</version.vertx>
+          <version.vertx-maven-plugin>1.0.7</version.vertx-maven-plugin>
+          <hystrix.version>1.5.12</hystrix.version>
+          <junit.version>4.12</junit.version>
+          <sl4j-api.version>1.7.21</sl4j-api.version>
+          <version.clean.plugin>2.5</version.clean.plugin>
+        </properties>
 
 </project>

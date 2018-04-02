@@ -9,11 +9,11 @@ import org.wildfly.swarm.health.HealthStatus;
 @Path("/")
 public class HealthCheckResource {
 
-    @GET
-    @Health
-    @Path("/status")
+    // Add annotations to make this method
+    // provide health status for this service at the path /status
     public HealthStatus check() {
-        return HealthStatus.named("server-state").up();
+	// Return the health status as "UP"
+	return null;
     }
 
 }

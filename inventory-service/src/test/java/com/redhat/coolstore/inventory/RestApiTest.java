@@ -2,6 +2,7 @@ package com.redhat.coolstore.inventory;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -120,12 +121,14 @@ public class RestApiTest {
     @Test
     @RunAsClient
     public void testHealthCheckStatus() throws Exception {
-        WebTarget target = client.target("http://localhost:"+ port).path("/status");
-        Response response = target.request(MediaType.APPLICATION_JSON).get();
-        assertThat(response.getStatus(), equalTo(new Integer(200)));
-        JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-        assertThat(value.getString("id", ""), equalTo("server-state"));
-        assertThat(value.getString("result", ""), equalTo("UP"));
+	// Invoke the /status URL with the JAX-RS client using a GET request
+        
+	// Assert that you get a valid HTTP response - HTTP status code 200 OK
+
+	// Parse the JSON response and verify the following attribute values:
+	//   * "id" should be equal to "server-state"
+	//   * "result" should be equal to "UP"
+	fail("Not implemented yet");
     }
 
     @Test

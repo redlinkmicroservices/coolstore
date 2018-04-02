@@ -8,7 +8,7 @@ import com.redhat.coolstore.inventory.service.InventoryService;
 @Specializes
 public class ErrorInventoryService extends InventoryService {
 	
-	@Override
+    @Override
     public Inventory getInventory(String itemId) {
         if ("error".equalsIgnoreCase(itemId)) {
             throw new RuntimeException();

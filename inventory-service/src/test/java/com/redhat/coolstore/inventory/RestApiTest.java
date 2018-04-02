@@ -84,23 +84,27 @@ public class RestApiTest {
     @Test
     @RunAsClient
     public void testGetInventory() throws Exception {
-        WebTarget target = client.target("http://localhost:" + port).path("/inventory").path("/123456");
-        Response response = target.request(MediaType.APPLICATION_JSON).get();
-
-        assertThat(response.getStatus(), equalTo(new Integer(200)));
-        JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-        assertThat(value.getString("itemId", null), equalTo("123456"));
-        assertThat(value.getString("location", null), equalTo("location"));
-        assertThat(value.getInt("quantity", 0), equalTo(new Integer(99)));
-        assertThat(value.getString("link", null), equalTo("link"));
+	// Invoke the /inventory/{itemId} end point with the JAX-RS client using a GET request
+	// Use "123456" as the item id
+	
+	// Assert the following on the response object
+	//   * HTTP status code of response is 200 OK
+	//   * "itemId" is equal to 123456
+	//   * "location" is equal to "location"
+	//   * "quantity" is equal to "99"
+	//   * "link" is equal to "link"
+        fail("Not implemented yet");
     }
 
     @Test
     @RunAsClient
     public void testGetInventoryWhenItemIdDoesNotExist() throws Exception {
-        WebTarget target = client.target("http://localhost:" + port).path("/inventory").path("/doesnotexist");
-        Response response = target.request(MediaType.APPLICATION_JSON).get();
-        assertThat(response.getStatus(), equalTo(new Integer(404)));
+	// Invoke the /inventory/{itemId} end point with the JAX-RS client using a GET request
+        // Use an invalid item id value that does not exist - for example "doesnotexist"
+
+        // Assert the following on the response object
+        //   * HTTP status code of response is 404 - Not Found
+        fail("Not implemented yet");
     }
 
     @Test

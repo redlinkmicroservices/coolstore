@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -139,25 +140,29 @@ public class ApiVerticleTest {
         doAnswer(new Answer<Void>() {
             public Void answer(InvocationOnMock invocation){
                 Handler<AsyncResult<Product>> handler = invocation.getArgument(1);
-                handler.handle(Future.succeededFuture(product));
+                /*
+                 * TODO check the mocked call arguments
+                 * Return the product from the mocked call
+                 */
                 return null;
              }
          }).when(catalogService).getProduct(any(),any());
 
 		Async async = context.async();
-		vertx.createHttpClient().get(port, "localhost", "/product/"+itemId1, response -> {
-			assertThat(response.statusCode(), equalTo(200));
-			assertThat(response.headers().get("Content-Type"), equalTo("application/json"));
-			response.bodyHandler(body -> {
-				JsonObject json = body.toJsonObject();
-				Product productResult = new Product(json);
-				assertThat(productResult, notNullValue());
-				assertThat(productResult.getItemId(), equalTo("111111"));
-				assertThat(productResult.getPrice(), equalTo(100.0));
-				verify(catalogService).getProduct(any(),any());
-				async.complete();
-			}).exceptionHandler(context.exceptionHandler());
-		}).exceptionHandler(context.exceptionHandler()).end();
+		/*
+		 * TODO use HttpClient to invoke the '/product/{itemId}' endpoint
+		 * Assert that the return status code is 200
+		 * Assert that the 'Content-Type' header indicates JSON content
+		 * Get the response body as a JsonObject
+		 * Assert that the JsonObject can be converted into a Product object
+		 * Assert that the returned product has the correct id
+		 * Assert that the returned product has the correct price
+		 * Verify that the mocked CatalogService.getProduct method was called
+		 * Do not forget to call the TestContext exceptionHandler method 
+		 * and wait for the TestContext to complete async calls
+		 */
+		async.complete();
+		fail("Not implemented yet");	
 	}
 
     @Test

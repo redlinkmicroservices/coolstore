@@ -9,8 +9,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.healthchecks.HealthCheckHandler;
-import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -45,11 +43,6 @@ public class ApiVerticle extends AbstractVerticle {
 		router.post("/product").handler(this::addProduct);
 		// The handler for this route is implemented by the `addProduct()` method.
 		// ----
-		router.get("/health/readiness").handler(requestHandler -> {
-			requestHandler.response().end("OK");
-		});
-		HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx).register("health", f -> health(f));
-		router.get("/health/liveness").handler(healthCheckHandler);
 		
 		// ----
 		// Create a HTTP server.
@@ -134,17 +127,4 @@ public class ApiVerticle extends AbstractVerticle {
 
 	}
 
-	private void health(Future<io.vertx.ext.healthchecks.Status> future) {
-		catalogService.ping(ar -> {
-			if (ar.succeeded()) {
-				if (!future.isComplete()) {
-					future.complete(Status.OK());
-				} else {
-					future.complete(Status.KO());
-				}
-
-			}
-		});
-
-	}
 }

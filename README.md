@@ -1,3 +1,3 @@
 # coolstore
 
-This is the do292-inventory-lab-solution branch.
+This is the do292-inventory-lab-begin branch.

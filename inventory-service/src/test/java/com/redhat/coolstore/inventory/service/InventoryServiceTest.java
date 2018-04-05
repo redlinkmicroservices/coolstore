@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Properties;
 
@@ -47,22 +48,30 @@ public class InventoryServiceTest {
                 .addAsResource("META-INF/test-load.sql",  "META-INF/test-load.sql");
     }
 
-    @Inject
-    private InventoryService inventoryService;
+    // Inject the Inventory service POJO
 
     @Test
     public void getInventory() throws Exception {
-        assertThat(inventoryService, notNullValue());
-        Inventory inventory = inventoryService.getInventory("123456");
-        assertThat(inventory, notNullValue());
-        assertThat(inventory.getQuantity(), is(99));
+        // Assert that the injected Inventory service object is not null
+	
+	// Call the getInventory() method and get the inventory object
+	// for item id 123456 
+	
+	// Assert that:
+	//     * The inventory object returned is not null
+	//     * The quantity is 99
+	fail("Not implemented yet");
     }
 
     @Test
     public void getNonExistingInventory() throws Exception {
-        assertThat(inventoryService, notNullValue());
-        Inventory inventory = inventoryService.getInventory("notfound");
-        assertThat(inventory, nullValue());
+        // Assert that the injected Inventory service object is not null
+	
+	// Call the getInventory() method and get the inventory object
+        // for an invalid item id called "notfound"
+        
+	// Assert that the returned inventory object is null
+	fail("Not implemented yet");
     }
 }
 

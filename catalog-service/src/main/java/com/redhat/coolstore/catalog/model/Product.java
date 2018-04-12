@@ -1,9 +1,9 @@
 package com.redhat.coolstore.catalog.model;
 
 import java.io.Serializable;
-
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
+
 @DataObject
 public class Product implements Serializable {
 
@@ -23,19 +23,6 @@ public class Product implements Serializable {
     	desc=object.getString("desc");
     	price=object.getDouble("price");
     }
-    
-    //-----
-    // Add a constructor which takes a JSON object as parameter. 
-    // The JSON representation of the Product class is:
-    // 
-    //  {
-    //    "itemId" : "329199",
-    //    "name" : "Forge Laptop Sticker",
-    //    "desc" : "JBoss Community Forge Project Sticker",
-    //    "price" : 8.50
-    //  }
-    //
-    //-----
     
     public String getItemId() {
         return itemId;
@@ -69,18 +56,6 @@ public class Product implements Serializable {
         this.price = price;
     }
     
-    //-----
-    // Implement the toJson method which returns a JsonObject representing this instance. 
-    // The JSON representation of the Product class is:
-    // 
-    //  {
-    //    "itemId" : "329199",
-    //    "name" : "Forge Laptop Sticker",
-    //    "desc" : "JBoss Community Forge Project Sticker",
-    //    "price" : 8.50
-    //  }
-    //
-    //-----
     public JsonObject toJson() {
     	JsonObject jsonObject = new JsonObject();
     	jsonObject.put("itemId", itemId);

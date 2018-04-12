@@ -27,31 +27,34 @@ public class CatalogServiceImpl implements CatalogService {
         client.find("products", query, ar -> {
             if (ar.succeeded()) {
                 List<Product> products = ar.result().stream()
-                                           .map(json -> new Product(json))
-                                           .collect(Collectors.toList());
+                    .map(json -> new Product(json))
+                    .collect(Collectors.toList());
                 resulthandler.handle(Future.succeededFuture(products));
-            } else {
+            }
+            else {
                 resulthandler.handle(Future.failedFuture(ar.cause()));
             }
         });
     }
 
-	   @Override
-	    public void getProduct(String itemId, Handler<AsyncResult<Product>> resulthandler) {
-	        JsonObject query = new JsonObject().put("itemId", itemId);
-	        client.find("products", query, ar -> {
-	            if (ar.succeeded()) {
-	                Optional<JsonObject> result = ar.result().stream().findFirst();
-	                if (result.isPresent()) {
-	                    resulthandler.handle(Future.succeededFuture(new Product(result.get())));
-	                } else {
-	                    resulthandler.handle(Future.succeededFuture(null));
-	                }
-	            } else {
-	                resulthandler.handle(Future.failedFuture(ar.cause()));
+	@Override
+	public void getProduct(String itemId, Handler<AsyncResult<Product>> resulthandler) {
+	    JsonObject query = new JsonObject().put("itemId", itemId);
+	    client.find("products", query, ar -> {
+	        if (ar.succeeded()) {
+	            Optional<JsonObject> result = ar.result().stream().findFirst();
+	            if (result.isPresent()) {
+	                resulthandler.handle(Future.succeededFuture(new Product(result.get())));
 	            }
-	        });
-	    }
+	            else {
+	                resulthandler.handle(Future.succeededFuture(null));
+	            }
+	        }
+	        else {
+	            resulthandler.handle(Future.failedFuture(ar.cause()));
+	        }
+	    });
+	}
 
 	@Override
 	public void addProduct(Product product, Handler<AsyncResult<String>> resulthandler) {
@@ -60,6 +63,7 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public void ping(Handler<AsyncResult<String>> resultHandler) {
+		resultHandler.handle(Future.succeededFuture("OK"));
 	}
 
 	private JsonObject toDocument(Product product) {

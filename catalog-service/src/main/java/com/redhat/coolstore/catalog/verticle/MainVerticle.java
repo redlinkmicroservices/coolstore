@@ -18,56 +18,28 @@ public class MainVerticle extends AbstractVerticle {
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
 
-		// ----
-		// To be implemented
-		//
-		// * Create a `ConfigStoreOptions` instance.
 		ConfigStoreOptions appStore = new ConfigStoreOptions();
+        appStore.setType("configmap").setFormat("yaml");
+        appStore.setConfig(new JsonObject()
+            .put("name", "app-config")
+            .put("key", "app-config.yaml"));
 		
-		
-
-		// * Set the type to "configmap" and the format to "yaml".
-		appStore.setType("configmap").setFormat("yaml");
-		// * Configure the `ConfigStoreOptions` instance with the name and the key of
-		// the configmap
-		appStore.setConfig(new JsonObject().put("name", "app-config").put("key", "app-config.yaml"));
-		// * Create a `ConfigRetrieverOptions` instance
 		ConfigRetrieverOptions configRetrieverOptions = new ConfigRetrieverOptions();
-		// * Add the `ConfigStoreOptions` instance as store to the
-		// `ConfigRetrieverOptions` instance
 		configRetrieverOptions.addStore(appStore);
-		// * Create a `ConfigRetriever` instance with the `ConfigRetrieverOptions`
-		// instance
+		
 		ConfigRetriever retriever = ConfigRetriever.create(vertx, configRetrieverOptions);
-		// * Use the `ConfigRetriever` instance to retrieve the configuration
-		retriever.getConfig(handler->{
-			// * If the retrieval was successful, call the `deployVerticles` method,
-			// otherwise fail the `startFuture` object.
-			if(handler.succeeded()) {
+		retriever.getConfig(handler -> {
+			if (handler.succeeded()) {
 				deployVerticles(handler.result(), startFuture);
-			}else {
+			}
+			else {
 				startFuture.fail(handler.cause());
 			}
 		});
-
-		//
-		// ----
 	}
 
 	private void deployVerticles(JsonObject config, Future<Void> startFuture) {
-
-		// ----
-		// To be implemented
-		//
-		// * Create a proxy for the `CatalogService`.
 		CatalogService proxy = CatalogService.createProxy(vertx);
-		
-		// * Create an instance of `ApiVerticle` and `CatalogVerticle`
-		// * Deploy the verticles
-		// * Make sure to pass the verticle configuration object as part of the
-		// deployment options
-		// * Use `Future` objects to get notified of successful deployment (or failure)
-		// of the verticle deployments.
 		
 		DeploymentOptions options = new DeploymentOptions();
 		options.setConfig(config);
@@ -79,19 +51,14 @@ public class MainVerticle extends AbstractVerticle {
 		Future<String> catalogVerticleFuture = Future.future();
 		vertx.deployVerticle(catalogVerticle, options, catalogVerticleFuture.completer());
 
-		// * Use a `CompositeFuture` to coordinate the deployment of both verticles.
-		// * Complete or fail the `startFuture` depending on the result of the
-		// CompositeFuture
-		//
-		// ----
 		CompositeFuture.all(apiVerticleFuture, catalogVerticleFuture).setHandler(handler -> {
 			if (handler.succeeded()) {
 				startFuture.complete();
-			} else {
+			}
+			else {
 				startFuture.fail(handler.cause());
 			}
 		});
-
 	}
 
 	@Override

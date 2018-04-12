@@ -8,7 +8,6 @@
     <version>1.0</version>
   </parent>
 
-  <groupId>com.redhat.coolstore</groupId>
   <artifactId>catalog-service</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -52,19 +51,19 @@
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
+      <artifactId>vertx-health-check</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
       <artifactId>vertx-config</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-config-yaml</artifactId>
     </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-config-kubernetes-configmap</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-config-yaml</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-health-check</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -103,7 +102,9 @@
         <version>${version.compiler.plugin}</version>
         <configuration>
           <annotationProcessors>
-            <annotationProcessor>io.vertx.codegen.CodeGenProcessor</annotationProcessor>
+            <annotationProcessor>
+               io.vertx.codegen.CodeGenProcessor
+            </annotationProcessor>
           </annotationProcessors>
           <generatedSourcesDirectory>
             ${project.basedir}/src/main/generated

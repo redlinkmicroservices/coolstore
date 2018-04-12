@@ -28,6 +28,7 @@ import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+
 @RunWith(VertxUnitRunner.class)
 public class CatalogServiceTest extends MongoTestBase {
 
@@ -67,12 +68,14 @@ public class CatalogServiceTest extends MongoTestBase {
         service.addProduct(product, ar -> {
             if (ar.failed()) {
                 context.fail(ar.cause().getMessage());
-            } else {
+            }
+            else {
                 JsonObject query = new JsonObject().put("_id", itemId);
                 mongoClient.findOne("products", query, null, ar1 -> {
                     if (ar1.failed()) {
                         context.fail(ar1.cause().getMessage());
-                    } else {
+                    }
+                    else {
                         assertThat(ar1.result().getString("name"), equalTo(name));
                         async.complete();
                     }
@@ -83,17 +86,42 @@ public class CatalogServiceTest extends MongoTestBase {
 
     @Test
     public void testGetProducts(TestContext context) throws Exception {
-        // ----
-        // To be implemented
-        // 
-        // In your test:
-        // -Insert two or more products in MongoDB. Use the `MongoClient.save` method to do so.
-        // - Retrieve the products from Mongo using the `testGetProducts` method.
-        // - Verify that no failures happened, 
-        //   that the number of products retrieved corresponds to the number inserted, 
-        //   and that the product values match what was inserted.
-        // 
-        // ----
+    	Async saveAsync = context.async(2);
+    	
+    	String itemId1 = "111111";
+    	JsonObject json1 = new JsonObject()
+    			.put("itemId", itemId1)
+    			.put("name", "productName1")
+    			.put("desc", "productDescription1")
+    			.put("price", new Double(100.0));
+    	mongoClient.save("products", json1 , ar -> {
+    		if (ar.failed()) {
+    			context.fail();
+    		}
+    	});
+		saveAsync.countDown();
+    	
+    	//TODO: add one more product test data to MongoDB
+		saveAsync.countDown();
+    	
+    	saveAsync.await();
+    	
+    	CatalogService service = new CatalogServiceImpl(vertx, getConfig(),
+    			mongoClient);
+    	
+    	Async async = context.async();
+    	
+    	service.getProducts(ar -> {
+    		if (ar.failed()) {
+    			context.fail(ar.cause().getMessage());
+    		}
+    		else {
+    	    	//TODO: assert the returned data is the data previously added to MongoDB
+
+    			async.complete();
+    		}
+    	});
+    	    	
     	fail("Not implemented yet");
     }
 
@@ -111,8 +139,8 @@ public class CatalogServiceTest extends MongoTestBase {
             if (ar.failed()) {
                 context.fail();
             }
-            saveAsync.countDown();
         });
+        saveAsync.countDown();
 
         String itemId2 = "222222";
         JsonObject json2 = new JsonObject()
@@ -125,8 +153,8 @@ public class CatalogServiceTest extends MongoTestBase {
             if (ar.failed()) {
                 context.fail();
             }
-            saveAsync.countDown();
         });
+        saveAsync.countDown();
 
         saveAsync.await();
 
@@ -137,7 +165,8 @@ public class CatalogServiceTest extends MongoTestBase {
         service.getProduct("111111", ar -> {
             if (ar.failed()) {
                 context.fail(ar.cause().getMessage());
-            } else {
+            }
+            else {
                 assertThat(ar.result(), notNullValue());
                 assertThat(ar.result().getItemId(), equalTo("111111"));
                 assertThat(ar.result().getName(), equalTo("productName1"));
@@ -172,7 +201,8 @@ public class CatalogServiceTest extends MongoTestBase {
         service.getProduct("222222", ar -> {
             if (ar.failed()) {
                 context.fail(ar.cause().getMessage());
-            } else {
+            }
+            else {
                 assertThat(ar.result(), nullValue());
                 async.complete();
             }
@@ -180,7 +210,7 @@ public class CatalogServiceTest extends MongoTestBase {
     }
 
 
-    //@Test
+    @Test
     public void testPing(TestContext context) throws Exception {
         CatalogService service = new CatalogServiceImpl(vertx, getConfig(), mongoClient);
         

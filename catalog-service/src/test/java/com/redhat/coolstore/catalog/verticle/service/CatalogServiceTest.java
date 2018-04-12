@@ -152,8 +152,8 @@ public class CatalogServiceTest extends MongoTestBase {
             if (ar.failed()) {
                 context.fail();
             }
+            saveAsync.countDown();
         });
-        saveAsync.countDown();
 
         String itemId2 = "222222";
         JsonObject json2 = new JsonObject()
@@ -166,8 +166,8 @@ public class CatalogServiceTest extends MongoTestBase {
             if (ar.failed()) {
                 context.fail();
             }
+            saveAsync.countDown();
         });
-        saveAsync.countDown();
 
         saveAsync.await();
 

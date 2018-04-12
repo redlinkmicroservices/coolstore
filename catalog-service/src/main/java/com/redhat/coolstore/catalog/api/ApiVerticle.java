@@ -29,8 +29,10 @@ public class ApiVerticle extends AbstractVerticle {
         router.get("/product/:itemId").handler(this::getProduct);
         router.route("/product").handler(BodyHandler.create());
         router.post("/product").handler(this::addProduct);
+		
+		//TODO: add dummy readiness route to the Router		
+		//TODO: add liveness route to the Router
 
-		//TODO: add the router to the HttpServer
 		vertx.createHttpServer().requestHandler(router::accept).listen(config().getInteger("catalog.http.port", 8080),
 				result -> {
 					if (result.succeeded()) {
@@ -94,4 +96,5 @@ public class ApiVerticle extends AbstractVerticle {
         });
 	}
 
+	//TODO: add health method (handler for the liveness route)
 }

@@ -15,15 +15,11 @@ public class CatalogVerticle extends AbstractVerticle {
     public void start(Future<Void> startFuture) throws Exception {
         
         client = MongoClient.createShared(vertx, config());
-                
-        //----
-        // * Create an instance of `CatalogService`.
+        
         CatalogService service = CatalogService.create(getVertx(), config(), client);
-        ProxyHelper.registerService(CatalogService.class, getVertx(), service, CatalogService.ADDRESS);
-        // * Register the service on the event bus
+        ProxyHelper.registerService(CatalogService.class, vertx, service, CatalogService.ADDRESS);
+        
         startFuture.complete();
-        // * Complete the future
-        //----
     }
 
     @Override

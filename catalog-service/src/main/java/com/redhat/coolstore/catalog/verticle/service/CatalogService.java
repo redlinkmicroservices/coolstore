@@ -4,33 +4,24 @@ import java.util.List;
 
 import com.redhat.coolstore.catalog.model.Product;
 
-import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
-@ProxyGen
 public interface CatalogService {
 
     final static String ADDRESS = "catalog-service"; 
 
     static CatalogService create(Vertx vertx, JsonObject config, MongoClient client) {
-        return new CatalogServiceImpl(vertx, config, client);
+    	//TODO: instantiate an implementation of the interface
+        return null;
     }
 
-    //----
-    //
-    // Add a static method that returns an instance of the client side proxy class for this service
-    // Initialize the proxy with the vertx instance and the event bus address (ADDRESS)
-    // Method signature:
-    // static CatalogService createProxy(Vertx vertx)
-    //----
-
-    
     static CatalogService createProxy(Vertx vertx) {
-            return new CatalogServiceVertxEBProxy(vertx, ADDRESS);
-        }
+    	//TODO: create the event bus proxy
+    	return null;
+    }
     
     void getProducts(Handler<AsyncResult<List<Product>>> resulthandler);
 

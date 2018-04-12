@@ -5,6 +5,7 @@ import java.util.Optional;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.ext.mongo.MongoClient;
+import io.vertx.serviceproxy.ProxyHelper;
 
 public class CatalogVerticle extends AbstractVerticle {
     
@@ -15,7 +16,8 @@ public class CatalogVerticle extends AbstractVerticle {
         
         client = MongoClient.createShared(vertx, config());
         
-        //TODO: create an instance CatalogService and register to the event bus
+        CatalogService service = CatalogService.create(getVertx(), config(), client);
+        ProxyHelper.registerService(CatalogService.class, vertx, service, CatalogService.ADDRESS);
         
         startFuture.complete();
     }

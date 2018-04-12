@@ -37,9 +37,14 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
     </dependency>
-    <!-- 
-    TODO: add the vertx-codegen and vertx-service-proxy dependencies
-    -->
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-codegen</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-service-proxy</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-mongo-client</artifactId>
@@ -93,6 +98,11 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${version.compiler.plugin}</version>
+        <configuration>
+          <!-- 
+          TODO: add the Vert.x CodeGenProcessor as an annotationProcessor
+          -->
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>

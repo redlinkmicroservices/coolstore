@@ -99,9 +99,14 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${version.compiler.plugin}</version>
         <configuration>
-          <!-- 
-          TODO: add the Vert.x CodeGenProcessor as an annotationProcessor
-          -->
+          <annotationProcessors>
+            <annotationProcessor>
+               io.vertx.codegen.CodeGenProcessor
+            </annotationProcessor>
+          </annotationProcessors>
+          <generatedSourcesDirectory>
+            ${project.basedir}/src/main/generated
+          </generatedSourcesDirectory>
         </configuration>
       </plugin>
       <plugin>

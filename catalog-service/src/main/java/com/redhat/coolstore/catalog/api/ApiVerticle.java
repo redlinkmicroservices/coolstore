@@ -24,46 +24,23 @@ public class ApiVerticle extends AbstractVerticle {
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
 
-		
-
 		Router router = Router.router(vertx);
-		// ----
-		// Add routes to the Router
-		// * A route for HTTP GET requests that matches the "/products" path.
-		// The handler for this route is implemented by the `getProducts()` method.
-		// * A route for HTTP GET requests that matches the /product/:itemId path.
-		// The handler for this route is implemented by the `getProduct()` method.
-		// * A route for the path "/product" to which a `BodyHandler` is attached.
-		// * A route for HTTP POST requests that matches the "/product" path.
-		// The handler for this route is implemented by the `addProduct()` method.
-		// ----
-		
-		// ----
-		// Create a HTTP server.
-		// * Use the `Router` as request handler
-		// * Use the verticle configuration to obtain the port to listen to.
-		// Get the configuration from the `config()` method of AbstractVerticle.
-		// Look for the key "catalog.http.host", which returns an Integer.
-		// The default value (if the key is not set in the configuration) is 8080.
-		// * If the HTTP server is correctly instantiated, complete the `Future`. If
-		// there is a failure, fail the `Future`.
-		// ----
+		//TODO: add routes to the Router
+
+		//TODO: add the router to the HttpServer
 		vertx.createHttpServer().listen(config().getInteger("catalog.http.port", 8080),
 				result -> {
 					if (result.succeeded()) {
 						startFuture.complete();
-					} else {
+					}
+					else {
 						startFuture.fail(result.cause());
 					}
 				});
 	}
 
     private void getProducts(RoutingContext rc) {
-    	// ----
-    	// * Call getProducts from the CatalogService instance
-    	// * From the List<Product> create a JsonArray instance
-    	// * Return the JsonArray as the requeest response
-    	// * Do not forget to set the 'Content-Type' 
+    	//TODO: implement this handler 
     }
 
 	private void getProduct(RoutingContext rc) {
@@ -89,18 +66,7 @@ public class ApiVerticle extends AbstractVerticle {
     }
 
 	private void addProduct(RoutingContext rc) {
-		// ----
-		// Needs to be implemented
-		// In the implementation:
-		// * Obtain the body contents from the `RoutingContext`. Expect the body to be
-		// JSON.
-		// * Transform the JSON payload to a `Product` object.
-		// * Call the `addProduct()` method of the CatalogService.
-		// * If the call succeeds, set a HTTP status code 201 on the
-		// `HttpServerResponse`, and end the response.
-		// * If the call fails, fail the `RoutingContext`.
-		// ----
-
+		//TODO: implement this handler
 	}
 
 }

@@ -14,21 +14,14 @@ public interface CatalogService {
     final static String ADDRESS = "catalog-service"; 
 
     static CatalogService create(Vertx vertx, JsonObject config, MongoClient client) {
+    	//TODO: instantiate an implementation of the interface
         return null;
     }
 
-    //----
-    //
-    // Add a static method that returns an instance of the client side proxy class for this service
-    // Initialize the proxy with the vertx instance and the event bus address (ADDRESS)
-    // Method signature:
-    // static CatalogService createProxy(Vertx vertx)
-    //----
-
-    
     static CatalogService createProxy(Vertx vertx) {
+    	//TODO: create the event bus proxy
     	return null;
-        }
+    }
     
     void getProducts(Handler<AsyncResult<List<Product>>> resulthandler);
 

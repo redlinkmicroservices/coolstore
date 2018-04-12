@@ -14,12 +14,9 @@ public class CatalogVerticle extends AbstractVerticle {
     public void start(Future<Void> startFuture) throws Exception {
         
         client = MongoClient.createShared(vertx, config());
-                
-        //----
-        // * Create an instance of `CatalogService`.
-        // * Register the service on the event bus
-        // * Complete the future
-        //----
+        
+        //TODO: create an instance CatalogService and register to the event bus
+        
         startFuture.complete();
     }
 

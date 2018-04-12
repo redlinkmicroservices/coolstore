@@ -26,6 +26,9 @@ public class ApiVerticle extends AbstractVerticle {
 
 		Router router = Router.router(vertx);
 		//TODO: add routes to the Router
+		
+		//TODO: add dummy readiness route to the Router		
+		//TODO: add liveness route to the Router
 
 		//TODO: add the router to the HttpServer
 		vertx.createHttpServer().listen(config().getInteger("catalog.http.port", 8080),
@@ -69,4 +72,5 @@ public class ApiVerticle extends AbstractVerticle {
 		//TODO: implement this handler
 	}
 
+	//TODO: add health method (handler for the liveness route)
 }

@@ -126,6 +126,10 @@
         <artifactId>fabric8-maven-plugin</artifactId>
         <version>${version.fabric8-maven-plugin}</version>
         <executions>
+          <!-- 
+          TODO: uncomment the Fabric8 Maven Plug-in 
+          -->
+          <!-- 
           <execution>
             <id>fmp</id>
             <goals>
@@ -133,6 +137,7 @@
               <goal>build</goal>
             </goals>
           </execution>
+         -->
         </executions>
         <configuration>
           <!--

@@ -25,10 +25,13 @@ public class ApiVerticle extends AbstractVerticle {
 	public void start(Future<Void> startFuture) throws Exception {
 
 		Router router = Router.router(vertx);
-		//TODO: add routes to the Router
+        router.get("/products").handler(this::getProducts);
+        router.get("/product/:itemId").handler(this::getProduct);
+        router.route("/product").handler(BodyHandler.create());
+        router.post("/product").handler(this::addProduct);
 
 		//TODO: add the router to the HttpServer
-		vertx.createHttpServer().listen(config().getInteger("catalog.http.port", 8080),
+		vertx.createHttpServer().requestHandler(router::accept).listen(config().getInteger("catalog.http.port", 8080),
 				result -> {
 					if (result.succeeded()) {
 						startFuture.complete();
@@ -40,7 +43,21 @@ public class ApiVerticle extends AbstractVerticle {
 	}
 
     private void getProducts(RoutingContext rc) {
-    	//TODO: implement this handler 
+        catalogService.getProducts(ar -> {
+            if (ar.succeeded()) {
+                List<Product> products = ar.result();
+                JsonArray json = new JsonArray();
+                products.stream()
+                    .map(p -> p.toJson())
+                    .forEach(p -> json.add(p));
+                rc.response()
+                    .putHeader("Content-type", "application/json")
+                    .end(json.encodePrettily());
+            }
+            else {
+                rc.fail(ar.cause());
+            }
+        });
     }
 
 	private void getProduct(RoutingContext rc) {
@@ -66,7 +83,15 @@ public class ApiVerticle extends AbstractVerticle {
     }
 
 	private void addProduct(RoutingContext rc) {
-		//TODO: implement this handler
+        JsonObject json = rc.getBodyAsJson();
+        catalogService.addProduct(new Product(json), ar -> {
+            if (ar.succeeded()) {
+                rc.response().setStatusCode(201).end();
+            }
+            else {
+                rc.fail(ar.cause());
+            }
+        });
 	}
 
 }

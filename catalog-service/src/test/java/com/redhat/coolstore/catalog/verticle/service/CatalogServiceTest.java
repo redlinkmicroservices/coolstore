@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+
 @RunWith(VertxUnitRunner.class)
 public class CatalogServiceTest extends MongoTestBase {
 
@@ -66,12 +68,14 @@ public class CatalogServiceTest extends MongoTestBase {
         service.addProduct(product, ar -> {
             if (ar.failed()) {
                 context.fail(ar.cause().getMessage());
-            } else {
+            }
+            else {
                 JsonObject query = new JsonObject().put("_id", itemId);
                 mongoClient.findOne("products", query, null, ar1 -> {
                     if (ar1.failed()) {
                         context.fail(ar1.cause().getMessage());
-                    } else {
+                    }
+                    else {
                         assertThat(ar1.result().getString("name"), equalTo(name));
                         async.complete();
                     }
@@ -82,64 +86,56 @@ public class CatalogServiceTest extends MongoTestBase {
 
     @Test
     public void testGetProducts(TestContext context) throws Exception {
-        // ----
-        // To be implemented
-        // 
-        // In your test:
-        // -Insert two or more products in MongoDB. Use the `MongoClient.save` method to do so.
     	Async saveAsync = context.async(2);
-        String itemId1 = "111111";
-        JsonObject json1 = new JsonObject()
-                .put("itemId", itemId1)
-                .put("name", "productName1")
-                .put("desc", "productDescription1")
-                .put("price", new Double(100.0));
-
-		//...
+    	
+    	String itemId1 = "111111";
+    	JsonObject json1 = new JsonObject()
+    			.put("itemId", itemId1)
+    			.put("name", "productName1")
+    			.put("desc", "productDescription1")
+    			.put("price", new Double(100.0));
     	mongoClient.save("products", json1 , ar -> {
-    	    if (ar.failed()) {
-    	        context.fail();
-    	    }
-    	    saveAsync.countDown();
+    		if (ar.failed()) {
+    			context.fail();
+    		}
+    		saveAsync.countDown();
     	});
+    	
         String itemId2 = "222222";
         JsonObject json2 = new JsonObject()
-                .put("itemId", itemId2)
-                .put("name", "productName2")
-                .put("desc", "productDescription2")
-                .put("price", new Double(100.0));
-
+            .put("itemId", itemId2)
+            .put("name", "productName2")
+            .put("desc", "productDescription2")
+            .put("price", new Double(100.0));
         mongoClient.save("products", json2, ar -> {
             if (ar.failed()) {
                 context.fail();
             }
-            saveAsync.countDown();
+    		saveAsync.countDown();
         });
-
-        saveAsync.await();
-
-        // - Retrieve the products from Mongo using the `testGetProducts` method.
-        CatalogService service = new CatalogServiceImpl(vertx, getConfig(), mongoClient);
-        Async async = context.async();
-
-        service.getProducts(ar -> {
-            if (ar.failed()) {
-                context.fail(ar.cause().getMessage());
-            } else {
+    	
+    	saveAsync.await();
+    	
+    	CatalogService service = new CatalogServiceImpl(vertx, getConfig(),
+    			mongoClient);
+    	
+    	Async async = context.async();
+    	
+    	service.getProducts(ar -> {
+    		if (ar.failed()) {
+    			context.fail(ar.cause().getMessage());
+    		}
+    		else {
                 assertThat(ar.result(), notNullValue());
                 assertThat(ar.result().size(), equalTo(2));
-                Set<String> itemIds = ar.result().stream().map(p -> p.getItemId()).collect(Collectors.toSet());
+                Set<String> itemIds = ar.result().stream().map(
+                    p -> p.getItemId()).collect(Collectors.toSet());
                 assertThat(itemIds.size(), equalTo(2));
                 assertThat(itemIds, allOf(hasItem(itemId1),hasItem(itemId2)));
-                async.complete();
-            }
-        });
 
-        // - Verify that no failures happened, 
-        //   that the number of products retrieved corresponds to the number inserted, 
-        //   and that the product values match what was inserted.
-        // 
-        // ----
+    			async.complete();
+    		}
+    	});
     }
 
     @Test
@@ -182,7 +178,8 @@ public class CatalogServiceTest extends MongoTestBase {
         service.getProduct("111111", ar -> {
             if (ar.failed()) {
                 context.fail(ar.cause().getMessage());
-            } else {
+            }
+            else {
                 assertThat(ar.result(), notNullValue());
                 assertThat(ar.result().getItemId(), equalTo("111111"));
                 assertThat(ar.result().getName(), equalTo("productName1"));
@@ -217,7 +214,8 @@ public class CatalogServiceTest extends MongoTestBase {
         service.getProduct("222222", ar -> {
             if (ar.failed()) {
                 context.fail(ar.cause().getMessage());
-            } else {
+            }
+            else {
                 assertThat(ar.result(), nullValue());
                 async.complete();
             }
@@ -225,7 +223,7 @@ public class CatalogServiceTest extends MongoTestBase {
     }
 
 
-    //@Test
+    @Test
     public void testPing(TestContext context) throws Exception {
         CatalogService service = new CatalogServiceImpl(vertx, getConfig(), mongoClient);
         

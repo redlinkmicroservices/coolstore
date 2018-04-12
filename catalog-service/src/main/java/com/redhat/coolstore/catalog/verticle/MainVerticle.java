@@ -4,6 +4,9 @@ import com.redhat.coolstore.catalog.api.ApiVerticle;
 import com.redhat.coolstore.catalog.verticle.service.CatalogService;
 import com.redhat.coolstore.catalog.verticle.service.CatalogVerticle;
 
+import io.vertx.config.ConfigRetriever;
+import io.vertx.config.ConfigRetrieverOptions;
+import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.DeploymentOptions;
@@ -14,42 +17,31 @@ public class MainVerticle extends AbstractVerticle {
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
-
-		// ----
-		// To be implemented
-		//
-		// * Create a `ConfigStoreOptions` instance.
-		// * Set the type to "configmap" and the format to "yaml".
-		// * Configure the `ConfigStoreOptions` instance with the name and the key of
-		// the configmap
-		// * Create a `ConfigRetrieverOptions` instance
-		// * Add the `ConfigStoreOptions` instance as store to the
-		// `ConfigRetrieverOptions` instance
-		// * Create a `ConfigRetriever` instance with the `ConfigRetrieverOptions`
-		// instance
-		// * Use the `ConfigRetriever` instance to retrieve the configuration
-		// * If the retrieval was successful, call the `deployVerticles` method,
-		// otherwise fail the `startFuture` object.
-		//
-		// ----
-		JsonObject config = new JsonObject();
-		deployVerticles(config, startFuture);
+		deployVerticles(new JsonObject(), startFuture);
 	}
+	
+//	@Override
+//	public void start(Future<Void> startFuture) throws Exception {
+//
+//		ConfigStoreOptions appStore = new ConfigStoreOptions();
+//		//TODO: configure the ConfigStore to use an OpenShift configmap
+//		
+//		ConfigRetrieverOptions configRetrieverOptions = new ConfigRetrieverOptions();
+//		configRetrieverOptions.addStore(appStore);
+//		
+//		ConfigRetriever retriever = ConfigRetriever.create(vertx, configRetrieverOptions);
+//		retriever.getConfig(handler -> {
+//			if (handler.succeeded()) {
+//				deployVerticles(handler.result(), startFuture);
+//			}
+//			else {
+//				startFuture.fail(handler.cause());
+//			}
+//		});
+//	}
 
 	private void deployVerticles(JsonObject config, Future<Void> startFuture) {
-
-		// ----
-		// To be implemented
-		//
-		// * Create a proxy for the `CatalogService`.
 		CatalogService proxy = CatalogService.createProxy(vertx);
-		
-		// * Create an instance of `ApiVerticle` and `CatalogVerticle`
-		// * Deploy the verticles
-		// * Make sure to pass the verticle configuration object as part of the
-		// deployment options
-		// * Use `Future` objects to get notified of successful deployment (or failure)
-		// of the verticle deployments.
 		
 		DeploymentOptions options = new DeploymentOptions();
 		options.setConfig(config);
@@ -61,19 +53,14 @@ public class MainVerticle extends AbstractVerticle {
 		Future<String> catalogVerticleFuture = Future.future();
 		vertx.deployVerticle(catalogVerticle, options, catalogVerticleFuture.completer());
 
-		// * Use a `CompositeFuture` to coordinate the deployment of both verticles.
-		// * Complete or fail the `startFuture` depending on the result of the
-		// CompositeFuture
-		//
-		// ----
 		CompositeFuture.all(apiVerticleFuture, catalogVerticleFuture).setHandler(handler -> {
 			if (handler.succeeded()) {
 				startFuture.complete();
-			} else {
+			}
+			else {
 				startFuture.fail(handler.cause());
 			}
 		});
-
 	}
 
 	@Override

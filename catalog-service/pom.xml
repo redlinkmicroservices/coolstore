@@ -37,6 +37,9 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
     </dependency>
+    <!--
+    TODO: add the vertx-codegen and service-proxy dependencies
+    -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-codegen</artifactId>

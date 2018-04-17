@@ -8,7 +8,7 @@
           <groupId>com.redhat.coolstore</groupId>
           <artifactId>coolstore-parent</artifactId>
           <version>1.0</version>
-	</parent>
+        </parent>
 
         <artifactId>inventory-service</artifactId>
         <version>1.0</version>
@@ -114,7 +114,7 @@
                <groups>com.redhat.coolstore.inventory.tests.UnitTests</groups>
              </configuration>
           </plugin>
-					<!-- Configure the fabric8 maven plug-in here -->
+          <!-- TODO: Configure the fabric8 maven plug-in here -->
        </plugins>
      </build>
 </project>

@@ -1,9 +1,6 @@
 package com.redhat.coolstore.inventory.service;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import com.redhat.coolstore.inventory.model.Inventory;
 
 // Add appropriate scope for this class

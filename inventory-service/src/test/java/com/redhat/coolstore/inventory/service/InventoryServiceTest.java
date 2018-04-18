@@ -1,14 +1,8 @@
 package com.redhat.coolstore.inventory.service;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.Properties;
-
-import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -48,29 +42,23 @@ public class InventoryServiceTest {
                 .addAsResource("META-INF/test-load.sql",  "META-INF/test-load.sql");
     }
 
-    // Inject the Inventory service POJO
+    // TODO: Inject the Inventory service POJO
 
     @Test
     public void getInventory() throws Exception {
-        // Assert that the injected Inventory service object is not null
-	
-	// Call the getInventory() method and get the inventory object
-	// for item id 123456 
-	
-	// Assert that:
-	//     * The inventory object returned is not null
-	//     * The quantity is 99
+        // TODO: Assert that the injected Inventory service object is not null
+	// TODO: Call the getInventory() method and get the inventory object for item id 123456 
+	// TODO: Assert that the inventory object returned is not null
+	// TODO: Assert that the quantity is 99
 	fail("Not implemented yet");
     }
 
     @Test
     public void getNonExistingInventory() throws Exception {
-        // Assert that the injected Inventory service object is not null
-	
-	// Call the getInventory() method and get the inventory object
-        // for an invalid item id called "notfound"
-        
-	// Assert that the returned inventory object is null
+        // TODO: Assert that the injected Inventory service object is not null
+	// TODO: Call the getInventory() method and get the inventory object for an invalid item id called "notfound"
+	// TODO: Assert that the returned inventory object is null
+	    
 	fail("Not implemented yet");
     }
 }

@@ -4,11 +4,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
 import java.util.Properties;
 
 import javax.ws.rs.client.Client;
@@ -17,16 +12,13 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.http.HttpStatus;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.jboss.shrinkwrap.resolver.api.maven.MavenResolvedArtifact;
-import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -84,10 +76,9 @@ public class RestApiTest {
     @Test
     @RunAsClient
     public void testGetInventory() throws Exception {
-	// Invoke the /inventory/{itemId} end point with the JAX-RS client using a GET request
-	// Use "123456" as the item id
+	// TODO: Invoke the path /inventory/{itemId} with the JAX-RS client using a GET request. Use item id of 123456
 	
-	// Assert the following on the response object
+	// TODO: Assert the following on the response object
 	//   * HTTP status code of response is 200 OK
 	//   * "itemId" is equal to 123456
 	//   * "location" is equal to "location"
@@ -99,11 +90,10 @@ public class RestApiTest {
     @Test
     @RunAsClient
     public void testGetInventoryWhenItemIdDoesNotExist() throws Exception {
-	// Invoke the /inventory/{itemId} end point with the JAX-RS client using a GET request
-        // Use an invalid item id value that does not exist - for example "doesnotexist"
+	// TODO: Invoke the /inventory/{itemId} end point with the JAX-RS client using a GET request. 
+	// Use an invalid item id value that does not exist - for example "doesnotexist"
 
-        // Assert the following on the response object
-        //   * HTTP status code of response is 404 - Not Found
+        // TODO: Assert that the status code of response is 404 - Not Found
         fail("Not implemented yet");
     }
 
@@ -125,11 +115,11 @@ public class RestApiTest {
     @Test
     @RunAsClient
     public void testHealthCheckStatus() throws Exception {
-	// Invoke the /status URL with the JAX-RS client using a GET request
+	// TODO: Invoke the /status URL with the JAX-RS client using a GET request
         
-	// Assert that you get a valid HTTP response - HTTP status code 200 OK
+	// TODO: Assert that you get a valid HTTP response - HTTP status code 200 OK
 
-	// Parse the JSON response and verify the following attribute values:
+	// TODO: Parse the JSON response and verify the following attribute values:
 	//   * "id" should be equal to "server-state"
 	//   * "result" should be equal to "UP"
 	fail("Not implemented yet");

@@ -4,3 +4,5 @@ spec:
   to:
     kind: Service
     name: ${project.artifactId}
+  host: ${project.artifactId}.apps.lab.example.com
+

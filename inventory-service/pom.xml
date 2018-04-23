@@ -114,7 +114,7 @@
                <groups>com.redhat.coolstore.inventory.tests.UnitTests</groups>
              </configuration>
           </plugin>
-					<!-- Configure the fabric8 maven plug-in here -->
+				  <!-- TODO: Configure the fabric8 maven plug-in here -->	
        </plugins>
      </build>
 </project>

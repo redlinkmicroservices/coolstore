@@ -121,11 +121,11 @@ public class RestApiTest {
     @Test
     @RunAsClient
     public void testHealthCheckStatus() throws Exception {
-	// Invoke the /status URL with the JAX-RS client using a GET request
+	// TODO: Invoke the /status URL with the JAX-RS client using a GET request
         
-	// Assert that you get a valid HTTP response - HTTP status code 200 OK
+	// TODO: Assert that you get a valid HTTP response - HTTP status code 200 OK
 
-	// Parse the JSON response and verify the following attribute values:
+	// TODO: Parse the JSON response and verify the following attribute values:
 	//   * "id" should be equal to "server-state"
 	//   * "result" should be equal to "UP"
 	fail("Not implemented yet");

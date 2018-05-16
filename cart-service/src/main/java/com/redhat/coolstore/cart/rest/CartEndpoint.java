@@ -12,14 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.redhat.coolstore.cart.model.ShoppingCart;
 import com.redhat.coolstore.cart.service.ShoppingCartService;
 
 @Path("/cart")
 @Component
-@CrossOrigin(origins = "*")
 public class CartEndpoint {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CartEndpoint.class);
@@ -31,9 +29,7 @@ public class CartEndpoint {
 	@Path("/{cartId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ShoppingCart getCart(@PathParam("cartId") String cartId) {
-		System.out.println("*** getCart: '" + cartId + "'");
 		ShoppingCart cart = shoppingCartService.getShoppingCart(cartId);
-		System.out.println("*** cart.getId: '" + cart.getId() + "'");
 		return cart;
 	}
 	
@@ -56,7 +52,6 @@ public class CartEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ShoppingCart checkout(@PathParam("cartId")  String cartId) {
 		LOG.info("Checkout: " + cartId);
-		//XXX noop
 		return shoppingCartService.getShoppingCart(cartId);
 	}
 	

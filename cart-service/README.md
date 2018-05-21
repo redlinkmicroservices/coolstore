@@ -27,7 +27,7 @@ or
 
 6. Test using curl
 
-$ java -jar target/cart-service-1.0.0-SNAPSHOT.jar -Dcatalog.service.url=http://catalog-service.apps.lab.example.com
+$ java -Dcatalog.service.url=http://catalog-service.apps.lab.example.com -jar target/cart-service-1.0.0-SNAPSHOT.jar
 
 $ curl localhost:8080/cart/123456
 

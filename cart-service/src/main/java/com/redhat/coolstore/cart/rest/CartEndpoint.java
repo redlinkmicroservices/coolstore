@@ -33,11 +33,8 @@ public class CartEndpoint {
 		return cart;
 	}
 	
-	@POST
-	@Path("/{cartId}/{itemId}/{quantity}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public ShoppingCart addToCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId, @PathParam("quantity") int quantity) {
-		return shoppingCartService.addToCart(cartId, itemId, quantity);
+		return null;
 	}
 
 	@DELETE

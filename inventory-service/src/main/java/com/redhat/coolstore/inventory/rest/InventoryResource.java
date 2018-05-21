@@ -1,12 +1,16 @@
 package com.redhat.coolstore.inventory.rest;
 
+import javax.inject.Inject;
+
 import com.redhat.coolstore.inventory.model.Inventory;
+import com.redhat.coolstore.inventory.service.InventoryService;
 
 // TODO: Add annotation to map this resource class to the path /inventory
 // TODO: Add annotation to make this class request scoped
 public class InventoryResource {
 
-  // TODO: Inject the service class for this microservice
+  @Inject
+  private InventoryService inventoryService;
 
   // TODO: Add annotation to respond to HTTP GET requests
   // TODO: Add annotation to respond to requests for the path /inventory/{itemId}

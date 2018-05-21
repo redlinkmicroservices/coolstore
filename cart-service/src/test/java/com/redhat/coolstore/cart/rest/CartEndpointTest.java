@@ -24,6 +24,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.fail;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -115,18 +116,9 @@ public class CartEndpointTest {
     @Test
     @DirtiesContext
     public void removeAllInstancesOfItemFromCart() throws Exception {
-
-        given()
-            .post("/{cartId}/{itemId}/{quantity}", "456789", "111111", new Integer(2));
-        given()
-            .delete("/{cartId}/{itemId}/{quantity}", "456789", "111111", new Integer(2))
-            .then()
-            .assertThat()
-            .statusCode(200)
-            .contentType(ContentType.JSON)
-            .body("id", equalTo("456789"))
-            .body("cartItemTotal", equalTo(new Float(0.0)))
-            .body("shoppingCartItemList", hasSize(0));
+    	//TODO add a few units of item 111111 to the cart and them remove all units
+    	//TODO assert that the cart is empty (no items) and total is zero 
+    	fail("Not implemented yet.");
     }
 
     @Test

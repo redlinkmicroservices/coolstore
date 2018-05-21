@@ -15,10 +15,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 	private Map<String,ShoppingCart> db = new HashMap<String,ShoppingCart>();
 	
-	@Autowired
+	//TODO inject the CatalogService implementation
     private CatalogService catalogService;
 
-    @Autowired
+    //TODO inject the PriceCalculationService implementation
     private PriceCalculationService priceCalculationService;
     
 	@Override

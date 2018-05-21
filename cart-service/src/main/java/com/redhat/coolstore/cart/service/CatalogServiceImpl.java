@@ -1,32 +1,17 @@
 package com.redhat.coolstore.cart.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-
 import com.redhat.coolstore.cart.model.Product;
 
-@Component
+//TODO mark this class as a Spring managed bean
 public class CatalogServiceImpl implements CatalogService {
 
-	@Value("${catalog.service.url}")
+	//TODO mark this attribute as a configuration value
 	private String catalogServiceUrl;
 
 	@Override
 	public Product getProduct(String itemId) {
-		RestTemplate restTemplate = new RestTemplate();
-		try {
-			ResponseEntity<Product> entity = restTemplate.getForEntity(catalogServiceUrl + "/product/" + itemId, Product.class);
-			return entity.getBody();
-		}
-		catch (HttpClientErrorException ex) {
-			if (ex.getRawStatusCode() == 404)
-				return null;
-			else
-				throw (ex);
-		}
+		//TODO use Spring Web RestTemplate to invoke the catalog service /product/{id} end point
+        return null;
 	}
 	
 }

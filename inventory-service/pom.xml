@@ -21,7 +21,7 @@
           <version.postgresql>9.4.1207</version.postgresql>
         </properties>
 
-	<!-- TODO: Configure Wildfly Swarm BOM here -->
+	    <!-- TODO: Configure Wildfly Swarm BOM here -->
 
         <dependencies>
           <dependency>
@@ -104,7 +104,21 @@
                <groups>com.redhat.coolstore.inventory.tests.UnitTests</groups>
              </configuration>
           </plugin>
-          <!-- TODO: Configure the fabric8 maven plug-in here -->
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric8-maven-plugin</artifactId>
+            <version>${version.fabric8-maven-plugin}</version>
+            <executions>
+              <!--<execution>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+             </execution> -->
+           </executions>
+           <configuration>
+           </configuration>
+         </plugin>
        </plugins>
      </build>
 </project>

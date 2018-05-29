@@ -3,8 +3,8 @@ package com.redhat.coolstore.gateway.api;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.Consumes;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

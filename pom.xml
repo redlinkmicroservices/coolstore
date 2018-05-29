@@ -29,7 +29,7 @@
 
         <properties>
           <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-          <version.wildfly.swarm>2017.12.1</version.wildfly.swarm>
+          <version.wildfly.swarm>7.1.0.redhat-77</version.wildfly.swarm>
           <version.compiler.plugin>3.1</version.compiler.plugin>
           <version.surefire.plugin>2.16</version.surefire.plugin>
           <version.war.plugin>2.5</version.war.plugin>
@@ -41,9 +41,9 @@
           <maven.compiler.source>1.8</maven.compiler.source>
           <openfeign.version>9.4.0</openfeign.version>
           <openfeign.opentracing.version>0.0.3</openfeign.opentracing.version>
-          <opentracing.version>0.22.0</opentracing.version>
-          <opentracing.web.servlet.filter.version>0.0.8</opentracing.web.servlet.filter.version>
-          <jaeger.version>0.19.0</jaeger.version>
+          <opentracing.version>0.27.0.redhat-4</opentracing.version>
+          <opentracing.web.servlet.filter.version>0.27.0.redhat-4</opentracing.web.servlet.filter.version>
+          <jaeger.version>0.27.0.redhat-4</jaeger.version>
           <swagger.version>1.5.8</swagger.version>
           <version.microprofile>1.2</version.microprofile>
           <arquillian.version>1.1.15.Final</arquillian.version>
@@ -54,11 +54,11 @@
           <version.hystrix>1.5.9</version.hystrix>
           <version.nimbus>4.23</version.nimbus>
           <spring-boot.bom.version>1.5.8.Final-redhat-1</spring-boot.bom.version>
-          <version.spring-boot>1.5.8.RELEASE</version.spring-boot>
-          <version.spring-boot.cxf-starter>3.2.0</version.spring-boot.cxf-starter>
+          <version.spring-boot>1.5.12.RELEASE</version.spring-boot>
+          <version.spring-boot.cxf-starter>3.1.12.redhat-1</version.spring-boot.cxf-starter>
           <version.spring-cloud.kubernetes>0.2.0.RELEASE</version.spring-cloud.kubernetes>
           <version.commons-io>2.5</version.commons-io>
-          <version.vertx>3.4.2.redhat-006</version.vertx>
+          <version.vertx>3.5.1.redhat-003</version.vertx>
           <version.vertx-maven-plugin>1.0.7</version.vertx-maven-plugin>
           <hystrix.version>1.5.12</hystrix.version>
           <junit.version>4.12</junit.version>

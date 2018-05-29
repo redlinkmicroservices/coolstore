@@ -1,0 +1,3 @@
+# Coolstore Inventory service [branch=do292-inventory-lab-solution]
+
+This repo contains the source code, tests and OpenShift resources for the Inventory service.

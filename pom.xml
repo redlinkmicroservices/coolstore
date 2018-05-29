@@ -55,6 +55,9 @@
           <version.nimbus>4.23</version.nimbus>
           <spring-boot.bom.version>1.5.8.Final-redhat-1</spring-boot.bom.version>
           <version.spring-boot>1.5.8.RELEASE</version.spring-boot>
+          <version.spring-boot.cxf-starter>3.2.0</version.spring-boot.cxf-starter>
+          <version.spring-cloud.kubernetes>0.2.0.RELEASE</version.spring-cloud.kubernetes>
+          <version.commons-io>2.5</version.commons-io>
           <version.vertx>3.4.2.redhat-006</version.vertx>
           <version.vertx-maven-plugin>1.0.7</version.vertx-maven-plugin>
           <hystrix.version>1.5.12</hystrix.version>

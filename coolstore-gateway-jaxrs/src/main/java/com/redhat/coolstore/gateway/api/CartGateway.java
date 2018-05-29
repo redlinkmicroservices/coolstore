@@ -29,7 +29,7 @@ public class CartGateway {
 	
 	@SuppressWarnings("cdi-ambiguous-dependency")
 	@Inject
-	@ConfigProperty(name="CART_SERVICE_URL", defaultValue="")
+	@ConfigProperty(name="CART_SERVICE_URL")
 	private String cartURL;
 	
 	private CartResource buildClient() {

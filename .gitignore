@@ -5,6 +5,7 @@
 .project
 .classpath
 .settings/
+**/target
 
 # editor swap files
 .*.sw?

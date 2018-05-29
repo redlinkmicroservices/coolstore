@@ -34,7 +34,6 @@ public class ProductGateway {
 	
 	
 	private ProductResource buildClient() {
-		System.out.println("Building new client with uri " + catalogServiceUrl);
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(catalogServiceUrl);
 		ResteasyWebTarget restEasyTarget = (ResteasyWebTarget)target;

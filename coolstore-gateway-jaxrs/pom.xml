@@ -9,8 +9,12 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<version.wildfly.swarm>2017.12.1</version.wildfly.swarm>
+		<version.wildfly.swarm>7.0.0.redhat-8</version.wildfly.swarm>
 		<version.fabric8-maven-plugin>3.5.30</version.fabric8-maven-plugin>
+		<version.resteasy-client>3.0.24.Final-redhat-1</version.resteasy-client>
+		<version.rest-assured>3.0.6</version.rest-assured>
+		<version.mockito>1.10.19</version.mockito>
+		<version.wiremock>2.14.0</version.wiremock>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -21,9 +25,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- <dependency> <groupId>org.eclipse.microprofile</groupId> <artifactId>microprofile</artifactId> 
-				<version>${version.microprofile}</version> <type>pom</type> <scope>provided</scope> 
-				</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -50,24 +51,51 @@
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>microprofile-config</artifactId>
+			<version>2017.12.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>hystrix</artifactId>
+			<version>2017.12.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>arquillian</artifactId>
+			<version>2017.12.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
-			<version>3.0.24.Final-redhat-1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxb-provider</artifactId>
-			<version>3.0.24.Final-redhat-1</version>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${version.rest-assured}</version>
+			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${version.mockito}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-standalone</artifactId>
+			<version>${version.wiremock}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.7.21</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -142,7 +170,7 @@
 								<config>
 									<wildfly-swarm>
 										<fromMode>isTag</fromMode>
-										<from>redhat-openjdk18-openshift:1.1</from>
+										<from>redhat-openjdk18-openshift</from>
 									</wildfly-swarm>
 								</config>
 								<excludes>

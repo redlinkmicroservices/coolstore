@@ -1,0 +1,18 @@
+{
+  "id": "mycart",
+  "cartItemTotal": 57.5,
+  "shippingTotal": 6.99,
+  "cartTotal": 64.49,
+  "shoppingCartItemList": [
+    {
+      "price": 28.75,
+      "quantity": 2,
+      "product": {
+        "itemId": "165614",
+        "name": "Ogio Caliber Polo",
+        "desc": "Moisture-wicking 100% polyester. Rib-knit collar and cuffs; Ogio jacquard tape inside neck.",
+        "price": 28.75
+      }
+    }
+  ]
+}

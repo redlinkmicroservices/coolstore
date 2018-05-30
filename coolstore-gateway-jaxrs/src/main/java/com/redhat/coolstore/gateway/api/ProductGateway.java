@@ -99,24 +99,6 @@ public class ProductGateway {
 		proxy.addProduct(product);
 	}
 
-//	private Product getFallbackProduct() {
-//		Product product = new Product();
-//		product.setItemId("0");
-//		product.setName("Unavailable Product");
-//		product.setDesc("Unavailable Product");
-//		product.setPrice(0);
-//		product.setAvailability(getFallbackInventory());
-//		return product;
-//	}
-//
-//	private Inventory getFallbackInventory() {
-//		Inventory inventory = new Inventory();
-//		inventory.setItemId("0");
-//		inventory.setQuantity(0);
-//		inventory.setLocation("Local Store");
-//		inventory.setLink("http://developers.redhat.com");
-//		return inventory;
-//	}
 	
 	public class GetWebTarget extends HystrixCommand<ProductResource> {
 		private Client client;

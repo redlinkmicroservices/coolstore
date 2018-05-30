@@ -50,7 +50,6 @@ public class CartGateway {
 	private boolean hystrixCircuitBreakerEnabled;
 
 	private CartResource buildClient() {
-		System.out.println("group key*******" + hystrixGroupKey);
 		Client client = ClientBuilder.newClient();
 		try {
 			CartResource cartResource = new GetWebTarget(client).execute();

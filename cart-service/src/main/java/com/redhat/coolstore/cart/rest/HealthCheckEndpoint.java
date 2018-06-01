@@ -19,7 +19,7 @@ public class HealthCheckEndpoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	//TODO change the return type
 	public String getHealth() {
-		//TODO invoke the HeanthEndpoint and return the result Health object
+		//TODO invoke the HealthEndpoint and return the result Health object
 		return null;
 	}
 }

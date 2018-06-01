@@ -33,7 +33,9 @@ public class CartEndpoint {
 		return cart;
 	}
 	
-	public ShoppingCart addToCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId, @PathParam("quantity") int quantity) {
+	//TODO add JAX-RS annotations
+	public ShoppingCart addToCart(String cartId, String itemId, int quantity) {
+		//TODO add a call to shoppingCartService.addToCart
 		return null;
 	}
 

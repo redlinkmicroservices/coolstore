@@ -16,7 +16,7 @@ import io.restassured.RestAssured;
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HealtCheckEndpointTest {
+public class HealthCheckEndpointTest {
 
     @Value("${local.server.port}")
     private int port;

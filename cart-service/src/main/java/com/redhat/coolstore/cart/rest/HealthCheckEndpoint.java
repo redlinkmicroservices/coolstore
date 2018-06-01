@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class HealthCheckEndpoint {
 
 	@Autowired
-	HealthEndpoint healthEndpoint;
+	private HealthEndpoint healthEndpoint;
 	@GET
 	@Path("/health")
 	@Produces(MediaType.APPLICATION_JSON)

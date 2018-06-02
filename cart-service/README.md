@@ -25,6 +25,18 @@ or
 
 [student@workstation cart-service]$ mvn clean fabric8:deploy -DskipTests -Popenshift
 
+6. Test using curl
+
+$ java -Dcatalog.service.url=http://catalog-service.apps.lab.example.com -jar target/cart-service-1.0.0-SNAPSHOT.jar
+
+$ curl localhost:8080/cart/123456
+
+$ curl -i -X POST localhost:8080/cart/123456/444435/3
+
+$ curl -i -X DELETE localhost:8080/cart/123456/444435/2
+
+$ curl localhost:8080/health
+
 ---- End UCF ---
 
 1.  `export CART_PRJ=<name of the OpenShift coolstore cart project>`

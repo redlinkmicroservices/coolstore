@@ -81,7 +81,8 @@ public class CatalogServiceImplTest {
         try {
             catalogService.getProduct("111111");
             fail();
-        } catch (HttpStatusCodeException e) {
+        }
+        catch (HttpStatusCodeException e) {
             assertThat(e.getRawStatusCode(), equalTo(503));
         }
 
@@ -97,7 +98,8 @@ public class CatalogServiceImplTest {
         try {
             catalogService.getProduct("111111");
             fail();
-        } catch (RestClientException e) {
+        }
+        catch (RestClientException e) {
             assertThat(e.getMessage(), containsString("I/O"));
         }
     }

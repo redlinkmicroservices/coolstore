@@ -6,13 +6,3 @@ swarm:
         connection-url: jdbc:postgresql://inventory-postgresql:5432/inventorydb
         user-name: jboss
         password: jboss
-  hystrix:
-    command:
-      default:
-        circuitBreaker:
-          sleepWindowInMilliseconds: 10000
-hystrix:
-  inventory:
-    groupKey: InventoryGroup
-    circuitBreaker:
-      requestVolumeThreshold: 10

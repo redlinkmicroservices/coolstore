@@ -79,6 +79,7 @@ public class CatalogVerticleTest extends MongoTestBase {
         saveAsync.await();
 
         Async async = context.async();
+        
         proxy.getProducts(ar -> {
             if (ar.failed()) {
                 context.fail(ar.cause().getMessage());

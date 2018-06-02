@@ -4,10 +4,10 @@
 .project
 .settings
 
-guides/**/pubsnum.xml
-guides/**/subtitle.xml
-guides/publican-*.cfg-*
-guides/tmp
+.project
+.classpath
+.settings/
+**/target
 
 # editor swap files
 .*.sw?

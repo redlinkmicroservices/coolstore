@@ -11,13 +11,12 @@
 	</parent>
 
         <artifactId>inventory-service</artifactId>
-        <version>1.0</version>
         <packaging>war</packaging>
         <name>Red Hat Training Coolstore: inventory-service</name>
         <description>The inventory microservice for the Coolstore App</description>
 
         <properties>
-          <version.h2>1.4.187</version.h2>
+	  <version.h2>1.4.187</version.h2>
           <version.postgresql>9.4.1207</version.postgresql>
         </properties>
 
@@ -57,6 +56,7 @@
           <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>arquillian</artifactId>
+            <version>${version.wildfly.swarm.community}</version>
             <scope>test</scope>
           </dependency>
           <dependency>
@@ -68,6 +68,7 @@
           <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>hystrix</artifactId>
+            <version>${version.wildfly.swarm.community}</version>
           </dependency>
           <dependency>
             <groupId>org.postgresql</groupId>

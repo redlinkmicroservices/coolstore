@@ -29,16 +29,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 	@Override
 	public ShoppingCart getShoppingCart(String cartId) {
-		System.out.println("### getShoppingCart: '" + cartId + "'");
 		ShoppingCart cart = db.get(cartId);
 		if (cart == null) {
 			cart = new ShoppingCart();
 			cart.setId(cartId);
 			db.put(cartId, cart);
-			System.out.println("### created: '" + cart.getId() + "'");
-		}
-		else {
-			System.out.println("### exists: '" + cart.getId() + "'");
 		}
 		return cart;
 	}

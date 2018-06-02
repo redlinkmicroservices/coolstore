@@ -16,7 +16,7 @@ ex. `oc create configmap gatewaycart --from-literal=CART_SERVICE_URL=http://cart
 
 3. Run fabric8 to deploy:
 
-`mvn clean fabric8:deploy -Popenshift`
+`mvn clean fabric8:deploy -Popenshift -DskipTests`
 
 4. Set the environment variables: [SKIP: no need to do anymore]
 

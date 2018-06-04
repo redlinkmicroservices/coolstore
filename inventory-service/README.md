@@ -30,7 +30,7 @@ registry-volume   10Gi       RWX           Retain          Bound       default/r
 vol01             1Gi        RWO           Recycle         Available                                                     1s
 vol02             1Gi        RWO           Recycle         Available 
 
-4. After you deploy mongodb, verify the PVC is bound:
+4. After you deploy postgresql, verify the PVC is bound:
 
 [student@workstation inventory-service]$ oc new-app -f ocp/inventory-service-postgresql-persistent.yaml -p INVENTORY_DB_USERNAME=jboss -p INVENTORY_DB_PASSWORD=jboss
 [student@workstation inventory-service]$ oc get pvc
@@ -40,8 +40,6 @@ postgresql-data-pv   Bound     vol01     1Gi        RWO                         
 
 5. oc policy add-role-to-user view -z default
 
-6. oc create configmap app-config --from-file=etc/app-config.yaml
-
-7. mvn clean fabric8:deploy -DskipTests
+6. mvn clean fabric8:deploy -DskipTests
 
 

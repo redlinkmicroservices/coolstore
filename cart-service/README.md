@@ -23,7 +23,7 @@ or
 
 5. Deploy the application using fabric8
 
-[student@workstation cart-service]$ mvn clean fabric8:deploy -DskipTests -Popenshift
+[student@workstation cart-service]$ mvn clean fabric8:deploy -DskipTests
 
 6. Test using curl
 

@@ -1,0 +1,5 @@
+catalog.http.port: 9090
+connection_string: mongodb://localhost:27017
+db_name: catalogdb
+username: mongo
+password: mongo

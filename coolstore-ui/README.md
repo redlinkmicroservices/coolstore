@@ -10,7 +10,7 @@ Many front-end npm modules used by the app don't play well with offline builds u
 
 The workaround is to use npm online to download dependencies, and copy them to views/dist, them remove the dependencies from package.jon.
 
-Both bower and npm are increadibly ineficient for containerized apps. The bower_components folder for this app was 42MiB and only 1.2 MiB was of files actually used. Using npm adds even more files to node_modues because nested dependencies.
+Both bower and npm are incredibly inefficient for containerized apps. The bower_components folder for this app was 42MiB and only 1.2 MiB was of files actually used. Using npm adds even more files to node_modues because nested dependencies.
 
 
 ---- Begin UCF ---
@@ -33,7 +33,8 @@ oc new-project coolstore-ui
   oc expose svc coolstore-ui
   
 3. Follow the build
-   oc logs -f bc/coolstore
+
+   oc logs -f bc/coolstore-ui 
    
 4. Test with a web browser using the route URL
 

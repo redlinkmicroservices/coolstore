@@ -6,12 +6,12 @@
 	<groupId>com.redhat.coolstore</groupId>
 	<artifactId>coolstore-gateway</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<version.wildfly.swarm>2017.12.1</version.wildfly.swarm>
-		<version.fabric8-maven-plugin>3.5.30</version.fabric8-maven-plugin>
-	</properties>
+	<packaging>war</packaging>
+	<parent>
+		<groupId>com.redhat.coolstore</groupId>
+		<artifactId>coolstore-parent</artifactId>
+		<version>1.0</version>
+	</parent>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -21,9 +21,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- <dependency> <groupId>org.eclipse.microprofile</groupId> <artifactId>microprofile</artifactId> 
-				<version>${version.microprofile}</version> <type>pom</type> <scope>provided</scope> 
-				</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -53,21 +50,49 @@
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>hystrix</artifactId>
+			<version>${version.wildfly.swarm.community}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>arquillian</artifactId>
+			<version>${version.wildfly.swarm.community}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
-			<version>3.0.24.Final-redhat-1</version>
+			<version>${version.resteasy}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxb-provider</artifactId>
-			<version>3.0.24.Final-redhat-1</version>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${version.rest-assured}</version>
+			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-standalone</artifactId>
+			<version>${version.wiremock}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.7.21</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -96,32 +121,13 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
-		</plugins>
-	</build>
-	<profiles>
-		<profile>
-			<id>local</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<dependencies>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
+			<plugin>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>2.12.4</version>
 						<configuration>
 							<groups>com.redhat.coolstore.gateway.api.tests.UnitTests</groups>
 						</configuration>
 					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>openshift</id>
-			<build>
-				<plugins>
 					<plugin>
 						<groupId>io.fabric8</groupId>
 						<artifactId>fabric8-maven-plugin</artifactId>
@@ -142,7 +148,7 @@
 								<config>
 									<wildfly-swarm>
 										<fromMode>isTag</fromMode>
-										<from>redhat-openjdk18-openshift:1.1</from>
+										<from>redhat-openjdk18-openshift</from>
 									</wildfly-swarm>
 								</config>
 								<excludes>
@@ -151,9 +157,7 @@
 							</generator>
 						</configuration>
 					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-	<packaging>war</packaging>
+		</plugins>
+	</build>
+
 </project>

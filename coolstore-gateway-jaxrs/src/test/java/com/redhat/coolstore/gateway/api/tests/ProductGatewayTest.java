@@ -20,6 +20,7 @@ import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.After;
 import org.junit.Before;
@@ -60,8 +61,7 @@ public class ProductGatewayTest {
 		WebArchive archive = ShrinkWrap.create(WebArchive.class, "coolstore-gateway.war")
 				.addPackages(true, RestApplication.class.getPackage())
 				.addPackages(true, ShoppingCartItem.class.getPackage())
-				.addAsResource("project-local.yml", "project-local.yml")
-				.addAsWebInfResource("test-beans.xml", "beans.xml")
+				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
 				.addAsManifestResource("config-test.properties","microprofile-config.properties")
 				.addPackages(true, CartResource.class.getPackage()).addClass(UnitTests.class);
 

@@ -53,7 +53,7 @@ public class ProductGatewayTest {
 	public static Swarm newContainer() throws Exception {
 		Properties properties = new Properties();
 		properties.put("swarm.http.port", port);
-		return new Swarm(properties).withProfile("local");
+		return new Swarm(properties);
 	}
 
 	@Deployment

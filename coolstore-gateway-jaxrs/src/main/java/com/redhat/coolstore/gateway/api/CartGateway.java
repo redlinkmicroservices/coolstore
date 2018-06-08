@@ -82,16 +82,17 @@ public class CartGateway {
 		return new AddToCartCommand(proxy, cartId, itemId, quantity).execute();
 	}
 	
-	private static class AddToCartCommand extends HystrixCommand<ShoppingCart>{
+	public static class AddToCartCommand extends HystrixCommand<ShoppingCart>{
 
 		private CartResource proxy;
 		private String cartId;
 		private String itemId;
 		private int quantity;
+		public final static String ADD_TO_CART_COMMAND_KEY="AddToCartCommandKey";
 		
 		public AddToCartCommand(CartResource proxy, String cartId, String itemId, int quantity) {
 			super(Setter
-					.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group"))
+					.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group")).andCommandKey(HystrixCommandKey.Factory.asKey(ADD_TO_CART_COMMAND_KEY))
 					.andCommandPropertiesDefaults(
 							HystrixCommandProperties
 								.Setter()
@@ -119,16 +120,18 @@ public class CartGateway {
 		return new RemoveFromCartCommand(proxy, cartId, itemId, quantity).execute();
 	}
 
-	private static class RemoveFromCartCommand extends HystrixCommand<ShoppingCart>{
+	public static class RemoveFromCartCommand extends HystrixCommand<ShoppingCart>{
 
 		private CartResource proxy;
 		private String cartId;
 		private String itemId;
 		private int quantity;
+		public static final String REMOVE_CART_COMMAND_KEY="RemoveFromCartCommandKey";
 		
 		public RemoveFromCartCommand(CartResource proxy, String cartId, String itemId, int quantity) {
 			super(Setter
 					.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group"))
+					.andCommandKey(HystrixCommandKey.Factory.asKey(REMOVE_CART_COMMAND_KEY))
 					.andCommandPropertiesDefaults(
 							HystrixCommandProperties
 								.Setter()
@@ -156,14 +159,16 @@ public class CartGateway {
 		return new CheckoutCommand(proxy, cartId).execute();
 	}
 	
-	private static class CheckoutCommand extends HystrixCommand<ShoppingCart>{
+	public static class CheckoutCommand extends HystrixCommand<ShoppingCart>{
 
 		private CartResource proxy;
 		private String cartId;
+		public static final String CHECKOUT_CART_COMMAND_KEY="CheckoutCartCommandKey";
 		
 		public CheckoutCommand(CartResource proxy, String cartId) {
 			super(Setter
 					.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group"))
+					.andCommandKey(HystrixCommandKey.Factory.asKey(CHECKOUT_CART_COMMAND_KEY))
 					.andCommandPropertiesDefaults(
 							HystrixCommandProperties
 								.Setter()

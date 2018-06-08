@@ -1,5 +1,17 @@
+metadata:
+  labels:
+    hystrix.cluster: default
+    hystrix.enabled: true
+    ribbon.eureka.enabled: false
+    eureka.client.enabled: false
 spec:
   template:
+    metadata:
+      labels:
+        hystrix.cluster: default
+        hystrix.enabled: true
+        ribbon.eureka.enabled: false
+        eureka.client.enabled: false
     spec:
       containers:
         - livenessProbe:

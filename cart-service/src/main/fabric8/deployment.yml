@@ -1,14 +1,17 @@
 metadata:
   labels:
-    hystrix.enabled: "true"
+    hystrix.cluster: coolstore
+    hystrix.enabled: true
+    ribbon.eureka.enabled: false
+    eureka.client.enabled: false
 spec:
-  selector:
-    matchLabels:
-      hystrix.enabled: "true"
   template:
     metadata:
       labels:
-        hystrix.enabled: "true"
+        hystrix.cluster: coolstore
+        hystrix.enabled: true
+        ribbon.eureka.enabled: false
+        eureka.client.enabled: false
     spec:
       containers:
         - livenessProbe:

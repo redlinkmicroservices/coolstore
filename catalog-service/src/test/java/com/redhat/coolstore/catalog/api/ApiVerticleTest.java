@@ -10,6 +10,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
@@ -97,19 +99,15 @@ public class ApiVerticleTest {
 	@Test
 	public void testGetProducts(TestContext context) throws Exception {
 		String itemId1 = "111111";
-		JsonObject json1 = new JsonObject().put("itemId", itemId1)
-				.put("name", "productName1")
-				.put("desc", "productDescription1")
-				.put("price", new Double(100.0));
+		JsonObject json1 = new JsonObject().put("itemId", itemId1).put("name", "productName1")
+				.put("desc", "productDescription1").put("price", new Double(100.0));
 		String itemId2 = "222222";
-		JsonObject json2 = new JsonObject().put("itemId", itemId2)
-				.put("name", "productName2")
-				.put("desc", "productDescription2")
-				.put("price", new Double(100.0));
+		JsonObject json2 = new JsonObject().put("itemId", itemId2).put("name", "productName2")
+				.put("desc", "productDescription2").put("price", new Double(100.0));
 		List<Product> products = new ArrayList<>();
 		products.add(new Product(json1));
 		products.add(new Product(json2));
-		
+
 		doAnswer(new Answer<Void>() {
 			public Void answer(InvocationOnMock invocation) {
 				Handler<AsyncResult<List<Product>>> handler = invocation.getArgument(0);
@@ -124,144 +122,250 @@ public class ApiVerticleTest {
 			assertThat(response.headers().get("Content-Type"), equalTo("application/json"));
 			response.bodyHandler(body -> {
 				JsonArray json = body.toJsonArray();
-				Set<String> itemIds = json.stream()
-						.map(j -> new Product((JsonObject) j))
-						.map(p -> p.getItemId())
+				Set<String> itemIds = json.stream().map(j -> new Product((JsonObject) j)).map(p -> p.getItemId())
 						.collect(Collectors.toSet());
 				assertThat(itemIds.size(), equalTo(2));
 				assertThat(itemIds, allOf(hasItem(itemId1), hasItem(itemId2)));
 				verify(catalogService).getProducts(any());
 				async.complete();
 			});
-		})
-		.exceptionHandler(context.exceptionHandler())
-		.end();
+		}).exceptionHandler(context.exceptionHandler()).end();
 	}
 
 	@Test
 	public void testGetProduct(TestContext context) throws Exception {
 		String itemId1 = "111111";
-		JsonObject json1 = new JsonObject()
-				.put("itemId", itemId1)
-				.put("name", "productName1")
-				.put("desc", "productDescription1")
-				.put("price", new Double(100.0));
+		JsonObject json1 = new JsonObject().put("itemId", itemId1).put("name", "productName1")
+				.put("desc", "productDescription1").put("price", new Double(100.0));
 		Product product = new Product(json1);
 
-        doAnswer(new Answer<Void>() {
-            public Void answer(InvocationOnMock invocation) {
-            	Handler<AsyncResult<Product>> handler = invocation.getArgument(1);
-            	
-            	handler.handle(Future.succeededFuture(product));
-            	
-                return null;
-             }
-         }).when(catalogService).getProduct(any(),any());
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				Handler<AsyncResult<Product>> handler = invocation.getArgument(1);
+
+				handler.handle(Future.succeededFuture(product));
+
+				return null;
+			}
+		}).when(catalogService).getProduct(any(), any());
 
 		Async async = context.async();
-		
-		vertx.createHttpClient().get(port, "localhost", "/product/" + itemId1,
-	        response -> {
-	        	assertThat(response.statusCode(), equalTo(200));
-                assertThat(response.headers().get("Content-Type"),equalTo("application/json"));
-                response.bodyHandler(body -> {
-                    JsonObject json = body.toJsonObject();
-                    Product productResult = new Product(json);
-		            
-                    assertThat(productResult, notNullValue());
-                    assertThat(productResult.getItemId(), equalTo("111111"));
-                    assertThat(productResult.getPrice(), equalTo(100.0));
 
-				    verify(catalogService).getProduct(any(),any());
-				    async.complete();
-                });
-                
-	        }).exceptionHandler(context.exceptionHandler()).end();
+		vertx.createHttpClient().get(port, "localhost", "/product/" + itemId1, response -> {
+			assertThat(response.statusCode(), equalTo(200));
+			assertThat(response.headers().get("Content-Type"), equalTo("application/json"));
+			response.bodyHandler(body -> {
+				JsonObject json = body.toJsonObject();
+				Product productResult = new Product(json);
+
+				assertThat(productResult, notNullValue());
+				assertThat(productResult.getItemId(), equalTo("111111"));
+				assertThat(productResult.getPrice(), equalTo(100.0));
+
+				verify(catalogService).getProduct(any(), any());
+				async.complete();
+			});
+
+		}).exceptionHandler(context.exceptionHandler()).end();
 	}
 
-    @Test
-    public void testGetNonExistingProduct(TestContext context) throws Exception {
-        doAnswer(new Answer<Void>() {
-            public Void answer(InvocationOnMock invocation){
-                Handler<AsyncResult<Product>> handler = invocation.getArgument(1);
-                handler.handle(Future.succeededFuture(null));
-                return null;
-             }
-         }).when(catalogService).getProduct(eq("111111"),any());
+	@Test
+	public void testGetNonExistingProduct(TestContext context) throws Exception {
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				Handler<AsyncResult<Product>> handler = invocation.getArgument(1);
+				handler.handle(Future.succeededFuture(null));
+				return null;
+			}
+		}).when(catalogService).getProduct(eq("111111"), any());
 
-        Async async = context.async();
-        vertx.createHttpClient().get(port, "localhost", "/product/111111", response -> {
-            assertThat(response.statusCode(), equalTo(404));
-            async.complete();
-        })
-        .exceptionHandler(context.exceptionHandler())
-        .end();
-    }
+		Async async = context.async();
+		vertx.createHttpClient().get(port, "localhost", "/product/111111", response -> {
+			assertThat(response.statusCode(), equalTo(404));
+			async.complete();
+		}).exceptionHandler(context.exceptionHandler()).end();
+	}
 
 	@Test
-    public void testAddProduct(TestContext context) throws Exception {
-        doAnswer(new Answer<Void>() {
-            public Void answer(InvocationOnMock invocation){
-                Handler<AsyncResult<String>> handler = invocation.getArgument(1);
-                handler.handle(Future.succeededFuture(null));
-                return null;
-            }
-        }).when(catalogService).addProduct(any(),any());
+	public void testAddProduct(TestContext context) throws Exception {
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				Handler<AsyncResult<String>> handler = invocation.getArgument(1);
+				handler.handle(Future.succeededFuture(null));
+				return null;
+			}
+		}).when(catalogService).addProduct(any(), any());
 
-        Async async = context.async();
-        String itemId = "111111";
-        JsonObject json = new JsonObject()
-                .put("itemId", itemId)
-                .put("name", "productName")
-                .put("desc", "productDescription")
-                .put("price", new Double(100.0));
-        String body = json.encodePrettily();
-        vertx.createHttpClient().post(port, "localhost", "/product")
-            .putHeader("Content-Type", "application/json")
-            .handler(response -> {
-                assertThat(response.statusCode(), equalTo(201));
-                ArgumentCaptor<Product> argument = ArgumentCaptor.forClass(Product.class);
-                verify(catalogService).addProduct(argument.capture(), any());
-                assertThat(argument.getValue().getItemId(), equalTo(itemId));
-                async.complete();
-            }
-        )
-        .exceptionHandler(context.exceptionHandler())
-        .end(body);
-    }
+		Async async = context.async();
+		String itemId = "111111";
+		JsonObject json = new JsonObject().put("itemId", itemId).put("name", "productName")
+				.put("desc", "productDescription").put("price", new Double(100.0));
+		String body = json.encodePrettily();
+		vertx.createHttpClient().post(port, "localhost", "/product").putHeader("Content-Type", "application/json")
+				.handler(response -> {
+					assertThat(response.statusCode(), equalTo(201));
+					ArgumentCaptor<Product> argument = ArgumentCaptor.forClass(Product.class);
+					verify(catalogService).addProduct(argument.capture(), any());
+					assertThat(argument.getValue().getItemId(), equalTo(itemId));
+					async.complete();
+				}).exceptionHandler(context.exceptionHandler()).end(body);
+	}
 
 	@Test
-    public void testLiveness(TestContext context) throws Exception {
-        doAnswer(new Answer<Void>() {
-            public Void answer(InvocationOnMock invocation){
-                Handler<AsyncResult<String>> handler = invocation.getArgument(0);
-                handler.handle(Future.succeededFuture("ok"));
-                return null;
-             }
-        }).when(catalogService).ping(any());
-        Async async = context.async();
-        vertx.createHttpClient().get(port, "localhost", "/health/liveness", response -> {
-            assertThat(response.statusCode(), equalTo(200));
-            response.bodyHandler(body -> {
-                JsonObject json = body.toJsonObject();
-                assertThat(json.toString(), containsString("\"outcome\":\"UP\""));
-                async.complete();
-            }).exceptionHandler(context.exceptionHandler());
-        })
-        .exceptionHandler(context.exceptionHandler())
-        .end();
-    }
+	public void testLiveness(TestContext context) throws Exception {
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				Handler<AsyncResult<String>> handler = invocation.getArgument(0);
+				handler.handle(Future.succeededFuture("ok"));
+				return null;
+			}
+		}).when(catalogService).ping(any());
+		Async async = context.async();
+		vertx.createHttpClient().get(port, "localhost", "/health/liveness", response -> {
+			assertThat(response.statusCode(), equalTo(200));
+			response.bodyHandler(body -> {
+				JsonObject json = body.toJsonObject();
+				assertThat(json.toString(), containsString("\"outcome\":\"UP\""));
+				async.complete();
+			}).exceptionHandler(context.exceptionHandler());
+		}).exceptionHandler(context.exceptionHandler()).end();
+	}
 
 	@Test
-    public void testHealthReadiness(TestContext context) throws Exception {
-	    Async async = context.async();
-        vertx.createHttpClient().get(port, "localhost", "/health/readiness", response -> {
-            assertThat(response.statusCode(), equalTo(200));
-            async.complete();
-        })
-        .exceptionHandler(context.exceptionHandler())
-        .end();
-    }
+	public void testHealthReadiness(TestContext context) throws Exception {
+		Async async = context.async();
+		vertx.createHttpClient().get(port, "localhost", "/health/readiness", response -> {
+			assertThat(response.statusCode(), equalTo(200));
+			async.complete();
+		}).exceptionHandler(context.exceptionHandler()).end();
+	}
 
-	
+	@Test
+	public void testGetProductsWhenCatalogServiceThrowsError(TestContext context) {
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				Handler<AsyncResult<List<Product>>> handler = invocation.getArgument(0);
+				handler.handle(Future.failedFuture("error"));
+				return null;
+			}
+		}).when(catalogService).getProducts(any());
+
+		Async async = context.async();
+		vertx.createHttpClient().get(port, "localhost", "/products", response -> {
+			assertThat(response.statusCode(), equalTo(503));
+			response.bodyHandler(body -> {
+				assertThat(body.toString(), equalTo("Service Unavailable"));
+				verify(catalogService).getProducts(any());
+				async.complete();
+			}).exceptionHandler(context.exceptionHandler());
+		}).exceptionHandler(context.exceptionHandler()).end();
+	}
+
+	@Test
+	public void testGetProductWhenNoProducts(TestContext context) throws Exception {
+		String itemId = "111111";
+		JsonObject json = new JsonObject().put("itemId", itemId).put("name", "productName1")
+				.put("desc", "productDescription1").put("price", new Double(100.0));
+		Product product = new Product(json);
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				Handler<AsyncResult<Product>> handler = invocation.getArgument(1);
+				handler.handle(Future.succeededFuture(product));
+				return null;
+			}
+		}).when(catalogService).getProduct(eq("111111"), any());
+
+		vertx.createHttpClient().get(port, "localhost", "/product/111111", response -> {
+			assertThat(response.statusCode(), equalTo(404));
+		});
+	}
+
+	@Test
+	public void testGetProductsWithTimeOut(TestContext context) {
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				vertx.setTimer(1500, l -> {
+					Handler<AsyncResult<List<Product>>> handler = invocation.getArgument(0);
+					handler.handle(Future.succeededFuture(new ArrayList<>()));
+				});
+				return null;
+			}
+		}).when(catalogService).getProducts(any());
+
+		Async async = context.async();
+		vertx.createHttpClient().get(port, "localhost", "/products", response -> {
+			assertThat(response.statusCode(), equalTo(503));
+			response.bodyHandler(body -> {
+				assertThat(body.toString(), equalTo("Service Unavailable"));
+				verify(catalogService).getProducts(any());
+				async.complete();
+			}).exceptionHandler(context.exceptionHandler());
+		}).exceptionHandler(context.exceptionHandler()).end();
+	}
+
+	@Test
+	public void testGetProductsWithCircuitOpen(TestContext context) {
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				Handler<AsyncResult<List<Product>>> handler = invocation.getArgument(0);
+				handler.handle(Future.failedFuture("Error"));
+				return null;
+			}
+		}).when(catalogService).getProducts(any());
+
+		Async async = context.async();
+		// Circuit Breaker opens after 3 failed calls
+		Async calls = context.async(3);
+		for (int i = 0; i < 3; i++) {
+			vertx.createHttpClient().get(port, "localhost", "/products", response -> {
+				calls.countDown();
+			}).exceptionHandler(context.exceptionHandler()).end();
+		}
+		calls.await();
+		vertx.createHttpClient().get(port, "localhost", "/products", response -> {
+			assertThat(response.statusCode(), equalTo(503));
+			response.bodyHandler(body -> {
+				assertThat(body.toString(), equalTo("Service Unavailable"));
+				// Protected service no longer called after 3 failed calls
+				verify(catalogService, times(3)).getProducts(any());
+				async.complete();
+			}).exceptionHandler(context.exceptionHandler());
+		}).exceptionHandler(context.exceptionHandler()).end();
+	}
+
+	@Test
+	public void testGetProductsWhenCircuitResetAfterOpen(TestContext context) {
+		doAnswer(new Answer<Void>() {
+			public Void answer(InvocationOnMock invocation) {
+				Handler<AsyncResult<List<Product>>> handler = invocation.getArgument(0);
+				handler.handle(Future.failedFuture("Error"));
+				return null;
+			}
+		}).when(catalogService).getProducts(any());
+
+		Async async = context.async();
+		// Circuit Breaker opens after 3 failed calls
+		Async calls = context.async(3);
+		for (int i = 0; i < 10; i++) {
+			vertx.createHttpClient().get(port, "localhost", "/products", response -> {
+				calls.countDown();
+			}).exceptionHandler(context.exceptionHandler()).end();
+		}
+		calls.await();
+		reset(catalogService);
+
+		vertx.setTimer(5000, l -> {
+			vertx.createHttpClient().get(port, "localhost", "/products", response -> {
+				assertThat(response.statusCode(), equalTo(503));
+				response.bodyHandler(body -> {
+					assertThat(body.toString(), equalTo("Service Unavailable"));
+					// Protected service is called again after reset
+					verify(catalogService, times(1)).getProducts(any());
+					async.complete();
+				}).exceptionHandler(context.exceptionHandler());
+			}).exceptionHandler(context.exceptionHandler()).end();
+		});
+	}
+
+
 }

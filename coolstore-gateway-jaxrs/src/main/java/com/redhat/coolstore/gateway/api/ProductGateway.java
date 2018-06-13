@@ -28,7 +28,7 @@ import com.redhat.coolstore.gateway.proxy.ProductResource;
 public class ProductGateway {
 
 	@Inject
-	@ConfigProperty(name = "CATALOG_SERVICE_URL", defaultValue = "http://catalog-service-coolstore-catalog.192.168.99.100.nip.io:80")
+	@ConfigProperty(name = "CATALOG_SERVICE_URL")
 	private String catalogServiceUrl;
 
 

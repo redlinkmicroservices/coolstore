@@ -22,7 +22,7 @@ import com.redhat.coolstore.gateway.api.CartGateway;
 import com.redhat.coolstore.gateway.proxy.CartResource;
 
 @Category(UnitTests.class)
-public class CartGatewayCircuitBreakerTest {
+public class CartGatewayGetCartCircuitBreakerTest {
 
 	@Mock
 	private CartResource proxy;

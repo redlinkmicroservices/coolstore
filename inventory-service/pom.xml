@@ -47,6 +47,7 @@
           <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>arquillian</artifactId>
+            <version>${version.arquillian.swarm}</version>
             <scope>test</scope>
           </dependency>
           <dependency>
@@ -58,6 +59,7 @@
           <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>hystrix</artifactId>
+            <version>${version.hystrix.swarm}</version>
           </dependency>
           <dependency>
             <groupId>org.postgresql</groupId>

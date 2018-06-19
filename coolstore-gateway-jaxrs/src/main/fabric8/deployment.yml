@@ -42,10 +42,10 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: CATALOG_SERVICE_URL
-                  name: gatewaycatalog
+                  name: gw-config
             - name: CART_SERVICE_URL
               valueFrom:
                 configMapKeyRef:
                   key: CART_SERVICE_URL
-                  name: gatewaycart
+                  name: gw-config
 

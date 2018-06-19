@@ -2,16 +2,12 @@ metadata:
   labels:
     hystrix.cluster: coolstore
     hystrix.enabled: true
-    ribbon.eureka.enabled: false
-    eureka.client.enabled: false
 spec:
   template:
     metadata:
       labels:
         hystrix.cluster: coolstore
         hystrix.enabled: true
-        ribbon.eureka.enabled: false
-        eureka.client.enabled: false
     spec:
       containers:
         - readinessProbe:

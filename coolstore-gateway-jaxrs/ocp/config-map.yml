@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: turbine-server
-data:
-  application.yml: |
-    turbine.aggregator.clusters.coolstore: 
-    turbine.aggregator.clusterConfig: 
-    turbine.instanceUrlSuffix: :8080/hystrix.stream

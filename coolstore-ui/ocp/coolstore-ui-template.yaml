@@ -170,7 +170,7 @@ parameters:
 - description: Coolstore API endpoint
   name: COOLSTORE_GW_URL
   required: true
-  value: http://coolstore-gateway-coolstore-gateway.apps.lab.example.com/api  
+  value: http://coolstore-gateway.apps.lab.example.com/api  
 - description: Coolstore Web UI hostname
   name: COOLSTORE_UI_HOSTNAME
   required: true

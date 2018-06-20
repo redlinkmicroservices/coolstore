@@ -35,9 +35,5 @@ spec:
                 configMapKeyRef:
                   key: CATALOG_SERVICE_URL
                   name: gw-config
-            - name: CART_SERVICE_URL
-              valueFrom:
-                configMapKeyRef:
-                  key: CART_SERVICE_URL
-                  name: gw-config
+            # TODO: Add the configmap reference for the cart service
 

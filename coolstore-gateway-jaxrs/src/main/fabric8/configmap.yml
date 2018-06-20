@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 data:
-  CATALOG_SERVICE_URL: http://catalog-service.apps.lab.example.com
-  # TODO: Add route URL for the cart microservice
+  # TODO: Add route URL for the catalog microservice
+  CART_SERVICE_URL: http://cart-service.apps.lab.example.com
 metadata:
   name: gw-config

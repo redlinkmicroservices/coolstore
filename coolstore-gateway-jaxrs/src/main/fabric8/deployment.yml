@@ -30,10 +30,10 @@ spec:
               cpu: 200m
               memory: 512Mi
           env:
-            - name: CATALOG_SERVICE_URL
+            # TODO: Add catalog service configmap reference
+            - name: CART_SERVICE_URL
               valueFrom:
                 configMapKeyRef:
-                  key: CATALOG_SERVICE_URL
+                  key: CART_SERVICE_URL
                   name: gw-config
-            # TODO: Add the configmap reference for the cart service
 

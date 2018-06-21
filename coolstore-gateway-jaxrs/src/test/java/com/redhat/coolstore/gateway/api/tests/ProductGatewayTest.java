@@ -81,6 +81,10 @@ public class ProductGatewayTest {
 	@Test
 	@RunAsClient
 	public void getProducts() throws Exception {
+		
+		// TODO: Mock the Catalog service. Use the catalogMockRule object (Line 46)
+		// TODO: Invoke the API Gateway. List all the products using a GET request to the /api/products path.
+		// TODO: Assert that a valid HTTP response code of 200 is seen in the response.
 
 		// Mock the Catalog service 
 		catalogMockRule.stubFor(get(urlMatching("/products"))
@@ -89,7 +93,7 @@ public class ProductGatewayTest {
 
 		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/products");
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
-
+		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
 		assertThat(response.getStatus(), equalTo(new Integer(200)));
 
 

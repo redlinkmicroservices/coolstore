@@ -32,6 +32,7 @@ import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.arquillian.CreateSwarm;
 
 import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.redhat.coolstore.gateway.api.RestApplication;
@@ -89,10 +90,12 @@ public class ProductGatewayTest {
 
 		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/products");
 		Response response = target.request(MediaType.APPLICATION_JSON).get();
+		JsonArray items = Json.parse(response.readEntity(String.class)).asArray();
 
 		assertThat(response.getStatus(), equalTo(new Integer(200)));
-
-
+		assertThat(items.size(), equalTo(new Integer(8)));
+		assertThat(items.get(0).asObject().getString("itemId", ""), equalTo("329299"));
+		assertThat(items.get(0).asObject().getString("name", ""), equalTo("Red Fedora"));
 	}
 	
 	@Test

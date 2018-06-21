@@ -6,6 +6,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Properties;
 
@@ -82,20 +83,14 @@ public class ProductGatewayTest {
 	@RunAsClient
 	public void getProducts() throws Exception {
 		
-		// TODO: Mock the Catalog service. Use the catalogMockRule object (Line 46)
+		// TODO: Mock the Catalog service to provide a list of products. Use the catalogMockRule reference (Line 47)
 		// TODO: Invoke the API Gateway. List all the products using a GET request to the /api/products path.
 		// TODO: Assert that a valid HTTP response code of 200 is seen in the response.
+		// TODO: Assert that the size of the array of products in the response is 8.
+		// TODO: Assert that the 'itemId' attribute of the first product in the array is '329299'
+		// TODO: Assert that the 'name' attribute of the first product in the array is 'Red Fedora'
 
-		// Mock the Catalog service 
-		catalogMockRule.stubFor(get(urlMatching("/products"))
-		        .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
-		        .withBodyFile("products.json")));
-
-		WebTarget target = client.target("http://localhost:" + port).path("/api").path("/products");
-		Response response = target.request(MediaType.APPLICATION_JSON).get();
-		JsonObject value = Json.parse(response.readEntity(String.class)).asObject();
-		assertThat(response.getStatus(), equalTo(new Integer(200)));
-
+		fail("Not yet implemented");
 
 	}
 	

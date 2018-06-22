@@ -1,3 +1,4 @@
 metadata:
   labels:
     hystrix.enabled: true
+    hystrix.cluster: coolstore

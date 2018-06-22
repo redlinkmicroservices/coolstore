@@ -1,0 +1,125 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: hystrix-dashboard
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: hystrix-dashboard
+    name: hystrix-dashboard
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: fabric8/hystrix-dashboard:1.0.28
+      from:
+        kind: DockerImage
+        name: fabric8/hystrix-dashboard:1.0.28
+      name: 1.0.28
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: hystrix-dashboard
+    name: hystrix-dashboard
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: hystrix-dashboard
+      deploymentconfig: hystrix-dashboard
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: hystrix-dashboard
+          deploymentconfig: hystrix-dashboard
+      spec:
+        containers:
+        - image: fabric8/hystrix-dashboard:1.0.28
+          imagePullPolicy: IfNotPresent
+          name: hystrix-dashboard
+          ports:
+          - containerPort: 9779
+            protocol: TCP
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8778
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - hystrix-dashboard
+        from:
+          kind: ImageStreamTag
+          name: hystrix-dashboard:1.0.28
+          namespace: monitor
+      type: ImageChange
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: hystrix-dashboard
+    name: hystrix-dashboard
+  spec:
+    host: hystrix.apps.lab.example.com
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: hystrix-dashboard
+      weight: 100
+    wildcardPolicy: None
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: hystrix-dashboard
+    name: hystrix-dashboard
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8778-tcp
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    - name: 9779-tcp
+      port: 9779
+      protocol: TCP
+      targetPort: 9779
+    selector:
+      app: hystrix-dashboard
+      deploymentconfig: hystrix-dashboard
+    sessionAffinity: None
+    type: ClusterIP

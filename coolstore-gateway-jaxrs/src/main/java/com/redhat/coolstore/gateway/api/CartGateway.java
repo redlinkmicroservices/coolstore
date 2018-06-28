@@ -34,6 +34,7 @@ public class CartGateway {
 	@ConfigProperty(name = "CART_SERVICE_URL")
 	private String cartURL;
 
+
 	private CartResource buildClient() {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target(cartURL);
@@ -45,68 +46,60 @@ public class CartGateway {
 	@Path("/{cartId}")
 	public ShoppingCart getCart(@PathParam("cartId") String cartId) {
 		CartResource proxy = buildClient();
-		// TODO use the HystrixCommand created for the getCart method and invoke the
-		// execute method
 		return proxy.getCart(cartId);
 	}
 
-	public static class GetCartCommand extends HystrixCommand<ShoppingCart> {
-		public final static String GET_CART_COMMAND_KEY = "GetCartCommandKey";
+	public static class GetCartCommand extends HystrixCommand<ShoppingCart>{
+		public final static String GET_CART_COMMAND_KEY="GetCartCommandKey";
 		private String cartId;
 		private CartResource proxy;
-
 		public GetCartCommand(CartResource proxy, String cartId) {
-			super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group"))
-					.andCommandKey(HystrixCommandKey.Factory.asKey(GET_CART_COMMAND_KEY)).andCommandPropertiesDefaults(
-							HystrixCommandProperties.Setter().withCircuitBreakerRequestVolumeThreshold(2)
-									.withCircuitBreakerSleepWindowInMilliseconds(5000)));
-			this.cartId = cartId;
-			this.proxy = proxy;
+		super(Setter
+		.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group"))
+		.andCommandKey(HystrixCommandKey.Factory.asKey(GET_CART_COMMAND_KEY))
+		.andCommandPropertiesDefaults(
+		HystrixCommandProperties
+		.Setter()
+		.withCircuitBreakerRequestVolumeThreshold(2)
+		.withCircuitBreakerSleepWindowInMilliseconds(5000)));
+		this.cartId=cartId;
+		this.proxy=proxy;
 		}
-
 		@Override
 		protected ShoppingCart run() throws Exception {
 			return proxy.getCart(cartId);
 		}
 	}
 
+	
 	@POST
 	@Path("/{cartId}/{itemId}/{quantity}")
 	public ShoppingCart addToCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId,
 			@PathParam("quantity") int quantity) {
 		CartResource proxy = buildClient();
-		// TODO use the HystrixCommand created for the addToCart method and invoke the
-		// execute method
+		//TODO use the HystrixCommand created for the addToCart method and invoke the execute method 
 		return proxy.addToCart(cartId, itemId, quantity);
 	}
-
-	// TODO Create a class that extends a HystrixCommand for the addToCart method
-	// named AddToCartCommand
+	
+	//TODO Create a class that extends a HystrixCommand for the addToCart method named AddToCartCommand
 
 	@DELETE
 	@Path("/{cartId}/{itemId}/{quantity}")
 	public ShoppingCart removeFromCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId,
 			@PathParam("quantity") int quantity) {
 		CartResource proxy = buildClient();
-		// TODO use the HystrixCommand created for the removeFromCart method and invoke
-		// the execute method
-
 		return proxy.removeFromCart(cartId, itemId, quantity);
 	}
 
-	// TODO Create a class that extends a HystrixCommand for the removeFromCart
-	// method named RemoveFromCartCommand
 
+	
 	@POST
 	@Path("/checkout/{cartId}")
 	public ShoppingCart checkout(@PathParam("cartId") String cartId) {
 		CartResource proxy = buildClient();
-		// TODO use the HystrixCommand created for the removeFromCart method and invoke
-		// the execute method
 		return proxy.checkout(cartId);
 	}
-
-	// TODO Create a class that extends a HystrixCommand for the checkout method
-	// named CheckoutCommand
+	
+	
 
 }

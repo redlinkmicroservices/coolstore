@@ -1,4 +1,0 @@
-data:
-  catalog.service.url: http://catalog-service.apps.lab.example.com
-metadata:
-  name: cart-service

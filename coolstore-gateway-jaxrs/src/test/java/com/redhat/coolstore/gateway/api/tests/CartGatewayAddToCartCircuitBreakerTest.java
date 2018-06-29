@@ -27,7 +27,7 @@ public class CartGatewayAddToCartCircuitBreakerTest {
 	private CartResource proxy;
 
 	@Before
-	public void before() throws Exception {
+	public  void before() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		ConfigurationManager.getConfigInstance().clear();
 		Hystrix.reset();
@@ -35,29 +35,29 @@ public class CartGatewayAddToCartCircuitBreakerTest {
 		openCircuitBreakerAfterOneFailingRequest();
 
 	}
-
+	
 	@After
 	public void after() {
 		MockitoAnnotations.initMocks(this);
 		ConfigurationManager.getConfigInstance().clear();
 		Hystrix.reset();
 	}
-
+	
 	@Test
 	public void testAddToCartCircuitBreaker() throws Exception {
-		doThrow(RuntimeException.class).when(proxy).addToCart("1", "2", 10);
+		doThrow(RuntimeException.class).when(proxy).addToCart("1","2", 10);
 		HystrixCircuitBreaker circuitBreaker = getCircuitBreaker();
 
 		// demonstrates circuit is actually closed
 		assertThat(circuitBreaker.isOpen(), equalTo(false));
 		assertThat(circuitBreaker.allowRequest(), equalTo(true));
 
-		CartGateway.AddToCartCommand command = new CartGateway.AddToCartCommand(proxy, "1", "2", 10);
+		CartGateway.AddToCartCommand command = new CartGateway.AddToCartCommand(proxy, "1","2",10);
 		try {
 			command.execute();
 			fail();
 		} catch (HystrixRuntimeException e) {
-			waitUntilCircuitBreakerOpens();
+            waitUntilCircuitBreakerOpens();
 			assertThat(circuitBreaker.isOpen(), is(true));
 		}
 	}
@@ -66,9 +66,10 @@ public class CartGatewayAddToCartCircuitBreakerTest {
 		Thread.sleep(1000);
 	}
 
+
 	private void warmUpAddToCartCircuitBreaker() {
-		when(proxy.addToCart("1", "2", 10)).thenReturn(null);
-		CartGateway.AddToCartCommand command = new CartGateway.AddToCartCommand(proxy, "1", "2", 10);
+		when(proxy.addToCart("1","2",10)).thenReturn(null);
+		CartGateway.AddToCartCommand command = new CartGateway.AddToCartCommand(proxy, "1","2",10);
 		command.execute();
 	}
 
@@ -81,8 +82,8 @@ public class CartGatewayAddToCartCircuitBreakerTest {
 	}
 
 	private void openCircuitBreakerAfterOneFailingRequest() {
-		ConfigurationManager.getConfigInstance().setProperty("hystrix.command."
-				+ CartGateway.AddToCartCommand.ADD_TO_CART_COMMAND_KEY + ".circuitBreaker.requestVolumeThreshold", 1);
+		ConfigurationManager.getConfigInstance().setProperty(
+				"hystrix.command." + CartGateway.AddToCartCommand.ADD_TO_CART_COMMAND_KEY+ ".circuitBreaker.requestVolumeThreshold", 1);
 	}
 
 }

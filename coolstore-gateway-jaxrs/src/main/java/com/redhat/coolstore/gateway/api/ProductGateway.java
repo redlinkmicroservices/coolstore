@@ -37,10 +37,6 @@ public class ProductGateway {
 		WebTarget target = client.target(catalogServiceUrl);
 		ResteasyWebTarget restEasyTarget = (ResteasyWebTarget) target;
 		return restEasyTarget.proxy(ProductResource.class);
-<<<<<<< HEAD
-
-=======
->>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c
 	}
 
 	@GET
@@ -65,9 +61,5 @@ public class ProductGateway {
 	}
 
 	
-<<<<<<< HEAD
-=======
-
->>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c
 
 }

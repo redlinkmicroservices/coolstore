@@ -21,10 +21,6 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 import com.redhat.coolstore.gateway.api.CartGateway;
 import com.redhat.coolstore.gateway.proxy.CartResource;
 
-<<<<<<< HEAD:coolstore-gateway-jaxrs/src/test/java/com/redhat/coolstore/gateway/api/tests/CartGatewayGetCartCircuitBreakerTest.java
-=======
-@Category(UnitTests.class)
->>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c:coolstore-gateway-jaxrs/src/test/java/com/redhat/coolstore/gateway/api/tests/CartGatewayGetCartCircuitBreakerTest.java
 public class CartGatewayGetCartCircuitBreakerTest {
 
 	@Mock

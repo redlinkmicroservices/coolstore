@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -21,6 +22,7 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 import com.redhat.coolstore.gateway.api.CartGateway;
 import com.redhat.coolstore.gateway.proxy.CartResource;
 
+@Category(UnitTests.class)
 public class CartGatewayGetCartCircuitBreakerTest {
 
 	@Mock

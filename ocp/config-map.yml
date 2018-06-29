@@ -5,5 +5,10 @@ metadata:
 data:
   application.yml: |
     turbine.aggregator.clusters.coolstore: 
+<<<<<<< HEAD
     turbine.aggregator.clusterConfig: coolstore
     turbine.instanceUrlSuffix: :8080/hystrix.stream
+=======
+    turbine.aggregator.clusterConfig: coolstore 
+    turbine.instanceUrlSuffix: :8080/hystrix.stream
+>>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c

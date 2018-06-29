@@ -7,9 +7,15 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+<<<<<<< HEAD
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+=======
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+>>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -21,20 +27,31 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 import com.redhat.coolstore.gateway.api.CartGateway;
 import com.redhat.coolstore.gateway.proxy.CartResource;
 
+<<<<<<< HEAD
+=======
+@Category(UnitTests.class)
+>>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c
 public class CartGatewayAddToCartCircuitBreakerTest {
 
 	@Mock
 	private CartResource proxy;
 
 	@Before
+<<<<<<< HEAD
 	public  void before() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		ConfigurationManager.getConfigInstance().clear();
 		Hystrix.reset();
+=======
+	public void before() throws Exception {
+		MockitoAnnotations.initMocks(this);
+		resetHystrix();
+>>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c
 		warmUpAddToCartCircuitBreaker();
 		openCircuitBreakerAfterOneFailingRequest();
 
 	}
+<<<<<<< HEAD
 	
 	@After
 	public void after() {
@@ -45,6 +62,11 @@ public class CartGatewayAddToCartCircuitBreakerTest {
 	
 	@Test
 	public void testAddToCartCircuitBreaker() throws Exception {
+=======
+
+	@Test
+	public void testGetCartCircuitBreaker() throws Exception {
+>>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c
 		doThrow(RuntimeException.class).when(proxy).addToCart("1","2", 10);
 		HystrixCircuitBreaker circuitBreaker = getCircuitBreaker();
 
@@ -58,6 +80,10 @@ public class CartGatewayAddToCartCircuitBreakerTest {
 			fail();
 		} catch (HystrixRuntimeException e) {
             waitUntilCircuitBreakerOpens();
+<<<<<<< HEAD
+=======
+			circuitBreaker = getCircuitBreaker();
+>>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c
 			assertThat(circuitBreaker.isOpen(), is(true));
 		}
 	}
@@ -66,6 +92,12 @@ public class CartGatewayAddToCartCircuitBreakerTest {
 		Thread.sleep(1000);
 	}
 
+<<<<<<< HEAD
+=======
+	private void resetHystrix() {
+		Hystrix.reset();
+	}
+>>>>>>> 0663c69b02aaa3bdab555ee6c9cd576b3739409c
 
 	private void warmUpAddToCartCircuitBreaker() {
 		when(proxy.addToCart("1","2",10)).thenReturn(null);

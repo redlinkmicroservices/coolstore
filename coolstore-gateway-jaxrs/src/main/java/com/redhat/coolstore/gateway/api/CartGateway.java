@@ -79,39 +79,11 @@ public class CartGateway {
 	public ShoppingCart addToCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId,
 			@PathParam("quantity") int quantity) {
 		CartResource proxy = buildClient();
-		return new AddToCartCommand(proxy, cartId, itemId, quantity).execute();
-	}
-	
-	public static class AddToCartCommand extends HystrixCommand<ShoppingCart>{
-
-		private CartResource proxy;
-		private String cartId;
-		private String itemId;
-		private int quantity;
-		public final static String ADD_TO_CART_COMMAND_KEY="AddToCartCommandKey";
-		
-		public AddToCartCommand(CartResource proxy, String cartId, String itemId, int quantity) {
-			super(Setter
-					.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group")).andCommandKey(HystrixCommandKey.Factory.asKey(ADD_TO_CART_COMMAND_KEY))
-					.andCommandPropertiesDefaults(
-							HystrixCommandProperties
-								.Setter()
-									.withCircuitBreakerRequestVolumeThreshold(2)
-									.withCircuitBreakerSleepWindowInMilliseconds(5000)));
-			this.cartId=cartId;
-			this.itemId=itemId;
-			this.quantity=quantity;
-			this.proxy=proxy;
-			
-		}
-
-		@Override
-		protected ShoppingCart run() throws Exception {
-			return proxy.addToCart(cartId, itemId, quantity);
-		}
-		
+		//TODO use the HystrixCommand created for the addToCart method and invoke the execute method 
+		return proxy.addToCart(cartId, itemId, quantity);
 	}
 
+	//TODO Create a class that extends a HystrixCommand for the addToCart method named AddToCartCommand
 	@DELETE
 	@Path("/{cartId}/{itemId}/{quantity}")
 	public ShoppingCart removeFromCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId,

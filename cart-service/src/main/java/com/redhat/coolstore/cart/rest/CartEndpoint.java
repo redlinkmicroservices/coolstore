@@ -29,8 +29,6 @@ public class CartEndpoint {
 
 	public static final String GET_CART_ENDPOINT_KEY = "GetCartEndpointCommandKey";
 	public static final String ADD_CART_ENDPOINT_KEY = "AddToCartEndpointCommandKey";
-	public static final String REMOVE_CART_ENDPOINT_KEY = "RemoveCartEndpointCommandKey";
-	public static final String CHECKOUT_CART_ENDPOINT_KEY = "CheckoutCartEndpointCommandKey";
 
 	@GET
 	@Path("/{cartId}")
@@ -54,8 +52,6 @@ public class CartEndpoint {
 
 	@DELETE
 	@Path("/{cartId}/{itemId}/{quantity}")
-	@HystrixCommand(commandKey = REMOVE_CART_ENDPOINT_KEY, commandProperties = {
-			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "1") })
 	@Produces(MediaType.APPLICATION_JSON)
 	public ShoppingCart removeFromCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId,
 			@PathParam("quantity") int quantity) {
@@ -64,8 +60,6 @@ public class CartEndpoint {
 
 	@POST
 	@Path("/checkout/{cartId}")
-	@HystrixCommand(commandKey = CHECKOUT_CART_ENDPOINT_KEY, commandProperties = {
-			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "1") })
 	@Produces(MediaType.APPLICATION_JSON)
 	public ShoppingCart checkout(@PathParam("cartId") String cartId) {
 		LOG.info("Checkout: " + cartId);

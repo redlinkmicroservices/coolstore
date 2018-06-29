@@ -37,8 +37,6 @@ public class CartHystrixConfigurationTest {
     public void setup() {
         warmUpGetCartCircuitBreaker();
         warmUpAddCartCircuitBreaker();
-        warmUpRemoveCartCircuitBreaker();
-        warmUpCheckoutCartCircuitBreaker();
     }
 
     private void warmUpGetCartCircuitBreaker() {
@@ -47,12 +45,6 @@ public class CartHystrixConfigurationTest {
 
     private void warmUpAddCartCircuitBreaker() {
         endpoint.addToCart("1", "1", 10);
-    }
-    private void warmUpRemoveCartCircuitBreaker() {
-        endpoint.removeFromCart("1", "1", 100);
-    }
-    private void warmUpCheckoutCartCircuitBreaker() {
-        endpoint.checkout("1");
     }
 
     
@@ -79,19 +71,7 @@ public class CartHystrixConfigurationTest {
 		assertTrue(executionTimeoutInMilliseconds.get() == 1000);
 	}
 
-	@Test
-	public void testRemoveCartCircuitBreaker() {
-		
-        HystrixProperty<Integer> executionTimeoutInMilliseconds = getCircuitBreakerCommandProperties(CartEndpoint.REMOVE_CART_ENDPOINT_KEY).executionTimeoutInMilliseconds();
-		assertTrue(executionTimeoutInMilliseconds.get() == 1000);
-	}
 
-	@Test
-	public void testCheckoutCartCircuitBreaker() {
-		
-        HystrixProperty<Integer> executionTimeoutInMilliseconds = getCircuitBreakerCommandProperties(CartEndpoint.CHECKOUT_CART_ENDPOINT_KEY).executionTimeoutInMilliseconds();
-		assertTrue(executionTimeoutInMilliseconds.get() == 1000);
-	}
 
 	
 }

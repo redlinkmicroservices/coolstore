@@ -103,15 +103,14 @@ public class ApiVerticle extends AbstractVerticle {
 	}
 
 	private void addProduct(RoutingContext rc) {
-		circuitBreaker.execute(future -> {
-			JsonObject json = rc.getBodyAsJson();
-			catalogService.addProduct(new Product(json), ar -> {
-				if (ar.succeeded()) {
-					rc.response().setStatusCode(201).end();
-				} else {
-					rc.fail(ar.cause());
-				}
-			});
+		JsonObject json = rc.getBodyAsJson();
+
+		catalogService.addProduct(new Product(json), ar -> {
+			if (ar.succeeded()) {
+				rc.response().setStatusCode(201).end();
+			} else {
+				rc.fail(ar.cause());
+			}
 		});
 	}
 

@@ -37,27 +37,6 @@ public class CartHystrixTest {
 		resetHystrix();
 	}
 
-	@Test
-	public void shouldRemoveCartCircuit() throws InterruptedException {
-		warmUpRemoveCartCircuitBreaker();
-		openCircuitBreakerAfterOneFailingRequest(CartEndpoint.REMOVE_CART_ENDPOINT_KEY);
-
-		willThrow(new RuntimeException()).given(shoppingCartService).removeFromCart("1","1",200);
-		HystrixCircuitBreaker circuitBreaker = getCircuitBreaker(CartEndpoint.REMOVE_CART_ENDPOINT_KEY);
-
-		// demonstrates circuit is actually closed
-		assertFalse(circuitBreaker.isOpen());
-		assertTrue(circuitBreaker.allowRequest());
-
-		try {
-			endpoint.removeFromCart("1","1",200);
-			fail("unexpected");
-		} catch (RuntimeException exception) {
-			waitUntilCircuitBreakerOpens();
-			assertTrue(circuitBreaker.isOpen());
-			assertFalse(circuitBreaker.allowRequest());
-		}
-	}
 	
 	@Test
 	public void shouldGetCartCircuit() throws InterruptedException {
@@ -124,10 +103,6 @@ public class CartHystrixTest {
 	}
 	
 
-	private void warmUpRemoveCartCircuitBreaker() {
-		when(shoppingCartService.removeFromCart("1", "1", 10)).thenReturn(null);
-		endpoint.removeFromCart("1", "1", 10);
-	}
 
 	public static HystrixCircuitBreaker getCircuitBreaker(String key) {
 		return HystrixCircuitBreaker.Factory.getInstance(getCommandKey(key));

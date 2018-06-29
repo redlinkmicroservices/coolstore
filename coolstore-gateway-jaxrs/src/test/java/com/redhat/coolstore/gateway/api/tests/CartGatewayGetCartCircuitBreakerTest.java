@@ -7,9 +7,9 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -21,7 +21,6 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 import com.redhat.coolstore.gateway.api.CartGateway;
 import com.redhat.coolstore.gateway.proxy.CartResource;
 
-@Category(UnitTests.class)
 public class CartGatewayGetCartCircuitBreakerTest {
 
 	@Mock
@@ -30,12 +29,18 @@ public class CartGatewayGetCartCircuitBreakerTest {
 	@Before
 	public void before() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		resetHystrix();
+		ConfigurationManager.getConfigInstance().clear();
+		Hystrix.reset();
 		warmUpGetCartCircuitBreaker();
 		openCircuitBreakerAfterOneFailingRequest();
 
 	}
 
+	@After
+	public void after() throws Exception{
+		resetHystrix();
+	}
+	
 	@Test
 	public void testGetCartCircuitBreaker() throws Exception {
 		String cartId = "1";
@@ -52,7 +57,6 @@ public class CartGatewayGetCartCircuitBreakerTest {
 			fail();
 		} catch (HystrixRuntimeException e) {
             waitUntilCircuitBreakerOpens();
-			circuitBreaker = getCircuitBreaker();
 			assertThat(circuitBreaker.isOpen(), is(true));
 		}
 	}
@@ -63,6 +67,8 @@ public class CartGatewayGetCartCircuitBreakerTest {
 
 	private void resetHystrix() {
 		Hystrix.reset();
+		ConfigurationManager.getConfigInstance().clear();
+
 	}
 
 	private void warmUpGetCartCircuitBreaker() {

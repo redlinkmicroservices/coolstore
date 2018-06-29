@@ -117,74 +117,18 @@ public class CartGateway {
 	public ShoppingCart removeFromCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId,
 			@PathParam("quantity") int quantity) {
 		CartResource proxy = buildClient();
-		return new RemoveFromCartCommand(proxy, cartId, itemId, quantity).execute();
+		return proxy.removeFromCart(cartId, itemId, quantity);
 	}
 
-	public static class RemoveFromCartCommand extends HystrixCommand<ShoppingCart>{
-
-		private CartResource proxy;
-		private String cartId;
-		private String itemId;
-		private int quantity;
-		public static final String REMOVE_CART_COMMAND_KEY="RemoveFromCartCommandKey";
-		
-		public RemoveFromCartCommand(CartResource proxy, String cartId, String itemId, int quantity) {
-			super(Setter
-					.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group"))
-					.andCommandKey(HystrixCommandKey.Factory.asKey(REMOVE_CART_COMMAND_KEY))
-					.andCommandPropertiesDefaults(
-							HystrixCommandProperties
-								.Setter()
-									.withCircuitBreakerRequestVolumeThreshold(2)
-									.withCircuitBreakerSleepWindowInMilliseconds(5000)));
-			this.cartId=cartId;
-			this.itemId=itemId;
-			this.quantity=quantity;
-			this.proxy=proxy;
-			
-		}
-
-		@Override
-		protected ShoppingCart run() throws Exception {
-			return proxy.removeFromCart(cartId, itemId, quantity);
-		}
-		
-	}
 
 	
 	@POST
 	@Path("/checkout/{cartId}")
 	public ShoppingCart checkout(@PathParam("cartId") String cartId) {
 		CartResource proxy = buildClient();
-		return new CheckoutCommand(proxy, cartId).execute();
+		return proxy.checkout(cartId);
 	}
 	
-	public static class CheckoutCommand extends HystrixCommand<ShoppingCart>{
-
-		private CartResource proxy;
-		private String cartId;
-		public static final String CHECKOUT_CART_COMMAND_KEY="CheckoutCartCommandKey";
-		
-		public CheckoutCommand(CartResource proxy, String cartId) {
-			super(Setter
-					.withGroupKey(HystrixCommandGroupKey.Factory.asKey("group"))
-					.andCommandKey(HystrixCommandKey.Factory.asKey(CHECKOUT_CART_COMMAND_KEY))
-					.andCommandPropertiesDefaults(
-							HystrixCommandProperties
-								.Setter()
-									.withCircuitBreakerRequestVolumeThreshold(2)
-									.withCircuitBreakerSleepWindowInMilliseconds(5000)));
-			this.cartId=cartId;
-			this.proxy=proxy;
-			
-		}
-
-		@Override
-		protected ShoppingCart run() throws Exception {
-			return proxy.checkout(cartId);
-		}
-		
-	}
 
 
 }

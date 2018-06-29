@@ -3,11 +3,14 @@ package com.redhat.coolstore.gateway.api.tests;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.netflix.config.ConfigurationManager;
+import com.netflix.hystrix.Hystrix;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixCommandMetrics;
 import com.netflix.hystrix.HystrixCommandProperties;
@@ -22,10 +25,16 @@ public class CartGatewayGetCartCircuitBreakerConfigTest {
 		@Before
 		public void before() throws Exception {
 			MockitoAnnotations.initMocks(this);
+			Hystrix.reset();
+			ConfigurationManager.getConfigInstance().clear();
 			warmUpGetCartCircuitBreaker();
-
 		}
-
+		
+		@After
+		public void after() throws Exception{
+			Hystrix.reset();
+			ConfigurationManager.getConfigInstance().clear();
+		}
 
 		@Test
 	    public void testGetCartTimeout() {
@@ -34,8 +43,6 @@ public class CartGatewayGetCartCircuitBreakerConfigTest {
 	    }
 
 
-	    
-
 		private void warmUpGetCartCircuitBreaker() {
 			when(proxy.getCart("1")).thenReturn(null);
 			CartGateway.GetCartCommand command = new CartGateway.GetCartCommand(proxy, "1");
@@ -43,12 +50,10 @@ public class CartGatewayGetCartCircuitBreakerConfigTest {
 	    }
 
 
-	    
 	    public static HystrixCommandProperties getCircuitBreakerCommandProperties(String commandKey) {
 	        return HystrixCommandMetrics.getInstance(getCommandKey(commandKey)).getProperties();
 	    }
 
-	    
 	    private static HystrixCommandKey getCommandKey(String commandKey) {
 	        return HystrixCommandKey.Factory.asKey(commandKey);
 	    }

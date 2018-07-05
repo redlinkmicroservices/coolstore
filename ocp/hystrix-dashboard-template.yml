@@ -14,10 +14,10 @@ objects:
       local: false
     tags:
     - annotations:
-        openshift.io/imported-from: fabric8/hystrix-dashboard:1.0.28
+        openshift.io/imported-from: registry.lab.example.com/fabric8/hystrix-dashboard:1.0.28
       from:
         kind: DockerImage
-        name: fabric8/hystrix-dashboard:1.0.28
+        name: registry.lab.example.com/fabric8/hystrix-dashboard:1.0.28
       name: 1.0.28
       referencePolicy:
         type: Source
@@ -52,7 +52,7 @@ objects:
           deploymentconfig: hystrix-dashboard
       spec:
         containers:
-        - image: fabric8/hystrix-dashboard:1.0.28
+        - image: registry.lab.example.com/fabric8/hystrix-dashboard:1.0.28
           imagePullPolicy: IfNotPresent
           name: hystrix-dashboard
           ports:

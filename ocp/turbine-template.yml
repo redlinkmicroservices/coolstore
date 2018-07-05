@@ -14,10 +14,10 @@ objects:
       local: false
     tags:
     - annotations:
-        openshift.io/imported-from: fabric8/turbine-server:1.0.28
+        openshift.io/imported-from: registry.lab.example.com/fabric8/turbine-server:1.0.28
       from:
         kind: DockerImage
-        name: fabric8/turbine-server:1.0.28
+        name: registry.lab.example.com/fabric8/turbine-server:1.0.28
       importPolicy: {}
       name: 1.0.28
       referencePolicy:
@@ -51,7 +51,7 @@ objects:
           deploymentconfig: turbine-server
       spec:
         containers:
-        - image: fabric8/turbine-server:1.0.28
+        - image: registry.lab.example.com/fabric8/turbine-server:1.0.28
           imagePullPolicy: IfNotPresent
           name: turbine-server
           ports:

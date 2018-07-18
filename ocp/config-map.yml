@@ -4,6 +4,6 @@ metadata:
   name: turbine-server
 data:
   application.yml: |
-    turbine.aggregator.clusters.coolstore: coolstore-gateway.coolstore-gateway,cart-service.cart-service,catalog-service.catalog-service,inventory-service.inventory-service
+    turbine.aggregator.clusters.coolstore: api-gateway-service.coolstore-gateway
     turbine.aggregator.clusterConfig: coolstore
     turbine.instanceUrlSuffix: :8080/hystrix.stream

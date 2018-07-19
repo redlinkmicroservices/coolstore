@@ -1,7 +1,3 @@
-metadata:
-  labels:
-    hystrix.cluster: coolstore
-    hystrix.enabled: true
 spec:
   template:
     metadata:

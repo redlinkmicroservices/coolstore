@@ -1,13 +1,8 @@
-metadata:
-  labels:
-    hystrix.cluster: coolstore
-    hystrix.enabled: true
 spec:
   template:
     metadata:
       labels:
-        hystrix.cluster: coolstore
-        hystrix.enabled: true
+        # TODO: add labels to enable hystrix
     spec:
       containers:
         - livenessProbe:

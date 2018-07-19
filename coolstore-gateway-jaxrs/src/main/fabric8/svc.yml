@@ -1,4 +1,3 @@
 metadata:
   labels:
-    hystrix.enabled: true
-    hystrix.cluster: coolstore
+    # TODO: add labels to enable hystrix

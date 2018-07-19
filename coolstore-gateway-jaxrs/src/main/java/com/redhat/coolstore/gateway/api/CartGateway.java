@@ -79,11 +79,13 @@ public class CartGateway {
 	public ShoppingCart addToCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId,
 			@PathParam("quantity") int quantity) {
 		CartResource proxy = buildClient();
+		
 		//TODO use the HystrixCommand created for the addToCart method and invoke the execute method 
 		return proxy.addToCart(cartId, itemId, quantity);
 	}
 
-	//TODO Create a class that extends a HystrixCommand for the addToCart method named AddToCartCommand
+	//TODO Create a static class that extends HystrixCommand for the addToCart method
+	
 	@DELETE
 	@Path("/{cartId}/{itemId}/{quantity}")
 	public ShoppingCart removeFromCart(@PathParam("cartId") String cartId, @PathParam("itemId") String itemId,

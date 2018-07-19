@@ -4,6 +4,6 @@ metadata:
   name: turbine-server
 data:
   application.yml: |
-    turbine.aggregator.clusters.coolstore: 
+    turbine.aggregator.clusters.coolstore: # TODO: Add list of services from which to aggregate hystrix data
     turbine.aggregator.clusterConfig: coolstore
     turbine.instanceUrlSuffix: :8080/hystrix.stream

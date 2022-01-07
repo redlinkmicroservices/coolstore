@@ -16,7 +16,7 @@
         <description>The inventory microservice for the Coolstore App</description>
 
         <properties>
-	  <version.h2>1.4.187</version.h2>
+	  <version.h2>2.0.206</version.h2>
           <version.postgresql>9.4.1207</version.postgresql>
         </properties>
 
